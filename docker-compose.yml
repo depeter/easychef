@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  easychef.api:
+    image: easychef.api
+    build:
+      context: ./EasyChef.API
+      dockerfile: Dockerfile
