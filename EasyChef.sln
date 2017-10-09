@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2020AC68-78E1-4D95-AF3C-2186B9362078}"
 EndProject
@@ -15,6 +15,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyChef.API", "EasyChef.API\EasyChef.API.csproj", "{204B4628-0E0B-4177-966F-0FC16206ECE1}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{22F88860-8B1E-403B-BB5B-3946FB4DF3EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyChef.Screenscrapers.CollectAndGo", "EasyChef.Screenscrapers.CollectAndGo\EasyChef.Screenscrapers.CollectAndGo.csproj", "{7D66B955-6F75-4FBB-8B76-315634D45A35}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyChef.Shared", "EasyChef.Shared\EasyChef.Shared.csproj", "{42E5897C-A3CD-472C-8944-C54F810889C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +38,14 @@ Global
 		{22F88860-8B1E-403B-BB5B-3946FB4DF3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22F88860-8B1E-403B-BB5B-3946FB4DF3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22F88860-8B1E-403B-BB5B-3946FB4DF3EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D66B955-6F75-4FBB-8B76-315634D45A35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D66B955-6F75-4FBB-8B76-315634D45A35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D66B955-6F75-4FBB-8B76-315634D45A35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D66B955-6F75-4FBB-8B76-315634D45A35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42E5897C-A3CD-472C-8944-C54F810889C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42E5897C-A3CD-472C-8944-C54F810889C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42E5897C-A3CD-472C-8944-C54F810889C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42E5897C-A3CD-472C-8944-C54F810889C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +53,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4AAFD9A8-008C-4ADF-8089-90C6ED4B96E3} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 		{204B4628-0E0B-4177-966F-0FC16206ECE1} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
+		{7D66B955-6F75-4FBB-8B76-315634D45A35} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
+		{42E5897C-A3CD-472C-8944-C54F810889C2} = {2020AC68-78E1-4D95-AF3C-2186B9362078}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FFB7B7FA-C0EB-4796-9B0E-C23DE0A35D94}

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using EasyChef.API.Models;
+using EasyChef.Shared.Models;
 
 namespace EasyChef.API.Controllers
 {
