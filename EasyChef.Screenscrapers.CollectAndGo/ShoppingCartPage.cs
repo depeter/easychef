@@ -23,7 +23,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo
                     Weight = div.FindElement(By.ClassName("product__weight")).Text,
                     SKU = div.FindElement(By.CssSelector("input[type='hidden'][name='viewArticleNumber']")).GetAttribute("value"),
                 };
-            }
+            } 
         }
     }
 }

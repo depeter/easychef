@@ -7,6 +7,11 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ValuesController.cs" />
+    <Compile Remove="DocumentDBRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Controllers\ShoppingCartController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,7 +21,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
-    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+    <PackageReference Include="ServiceStack.Redis.Core" Version="1.0.44" />
   </ItemGroup>
 
   <ItemGroup>

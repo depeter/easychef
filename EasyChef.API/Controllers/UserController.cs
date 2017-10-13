@@ -1,46 +1,104 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using EasyChef.Shared.Models;
+using StackExchange.Redis;
+using ServiceStack.Redis;
 
 namespace EasyChef.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Produces("application/json")]
+    [Route("api/User")]
     public class UserController : Controller
     {
-        // GET api/values
+        private readonly IRedisClientsManager redisClientsManager;
+
+        public UserController(IRedisClientsManager redisClientsManager)
+        {
+            this.redisClientsManager = redisClientsManager;
+        }
+
+        [Route("api/User/{id:long}")]
         [HttpGet]
-        public async Task<IEnumerable<User>> Get()
+        public ActionResult Get(long id)
         {
-            return await DocumentDBRepository<User>.GetItemsAsync(x => true);
+            if (id <= 0)
+                ModelState.AddModelError("", "Please specify a valid User id.");
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            using (IRedisClient redis = redisClientsManager.GetClient())
+            {
+                var repo = redis.As<User>();
+                return Ok(repo.GetById(id));
+            }
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<IEnumerable<User>> Get(long id)
-        {
-            return await DocumentDBRepository<User>.GetItemsAsync(x => x.Id == id);
-        }
-
-        // POST api/values
+        [Route("api/User")]
         [HttpPost]
-        public async Task Post([FromBody]User User)
+        public ActionResult Post(User User)
         {
-            await DocumentDBRepository<User>.CreateItemAsync(User);
+            if (User == null)
+                ModelState.AddModelError("", "Please specify an object of type User.");
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            using (IRedisClient redis = redisClientsManager.GetClient())
+            {
+                var repo = redis.As<User>();
+                User.Id = repo.GetNextSequence();
+                repo.Store(User);
+            }
+            return Ok();
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody]User User)
+        [Route("api/User")]
+        [HttpDelete]
+        public ActionResult Delete(long id)
         {
-            await DocumentDBRepository<User>.UpdateItemAsync(id, User);
+            if (id <= 0)
+                ModelState.AddModelError("", "Please specify a valid User id.");
+
+            using (IRedisClient redis = redisClientsManager.GetClient())
+            {
+                var repo = redis.As<User>();
+
+                if (repo.GetById(id) == null)
+                    ModelState.AddModelError("Id", "Unable to find a User with the specified id.");
+
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                repo.Delete(repo.GetById(id));
+                return Ok();
+            }
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        [Route("api/User")]
+        [HttpPut]
+        public ActionResult Put(User User)
         {
-            await DocumentDBRepository<User>.DeleteItemAsync(id);
+            if (User == null)
+                ModelState.AddModelError("", "Please specify an object of type User.");
+
+            if (User.Id == 0)
+                ModelState.AddModelError("Id", "Unable to update a User that doesn't exist yet.");
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            using (IRedisClient redis = redisClientsManager.GetClient())
+            {
+                var repo = redis.As<User>();
+                User.Id = repo.GetNextSequence();
+                repo.Store(User);
+            }
+            return Ok();
         }
     }
 }

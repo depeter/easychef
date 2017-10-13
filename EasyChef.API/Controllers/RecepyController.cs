@@ -1,46 +1,104 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using EasyChef.Shared.Models;
+using StackExchange.Redis;
+using ServiceStack.Redis;
 
 namespace EasyChef.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Produces("application/json")]
+    [Route("api/Recepy")]
     public class RecepyController : Controller
     {
-        // GET api/values
+        private readonly IRedisClientsManager redisClientsManager;
+
+        public RecepyController(IRedisClientsManager redisClientsManager)
+        {
+            this.redisClientsManager = redisClientsManager;
+        }
+
+        [Route("api/Recepy/{id:long}")]
         [HttpGet]
-        public async Task<IEnumerable<Recepy>> Get()
+        public ActionResult Get(long id)
         {
-            return await DocumentDBRepository<Recepy>.GetItemsAsync(x => true);
+            if (id <= 0)
+                ModelState.AddModelError("", "Please specify a valid Recepy id.");
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            using (IRedisClient redis = redisClientsManager.GetClient())
+            {
+                var repo = redis.As<Recepy>();
+                return Ok(repo.GetById(id));
+            }
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public async Task<IEnumerable<Recepy>> Get(long id)
-        {
-            return await DocumentDBRepository<Recepy>.GetItemsAsync(x => x.Id == id);
-        }
-
-        // POST api/values
+        [Route("api/Recepy")]
         [HttpPost]
-        public async Task Post([FromBody]Recepy recepy)
+        public ActionResult Post(Recepy Recepy)
         {
-            await DocumentDBRepository<Recepy>.CreateItemAsync(recepy);
+            if (Recepy == null)
+                ModelState.AddModelError("", "Please specify an object of type Recepy.");
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            using (IRedisClient redis = redisClientsManager.GetClient())
+            {
+                var repo = redis.As<Recepy>();
+                Recepy.Id = repo.GetNextSequence();
+                repo.Store(Recepy);
+            }
+            return Ok();
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody]Recepy recepy)
+        [Route("api/Recepy")]
+        [HttpDelete]
+        public ActionResult Delete(long id)
         {
-            await DocumentDBRepository<Recepy>.UpdateItemAsync(id, recepy);
+            if (id <= 0)
+                ModelState.AddModelError("", "Please specify a valid Recepy id.");
+
+            using (IRedisClient redis = redisClientsManager.GetClient())
+            {
+                var repo = redis.As<Recepy>();
+
+                if (repo.GetById(id) == null)
+                    ModelState.AddModelError("Id", "Unable to find a Recepy with the specified id.");
+
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                repo.Delete(repo.GetById(id));
+                return Ok();
+            }
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        [Route("api/Recepy")]
+        [HttpPut]
+        public ActionResult Put(Recepy Recepy)
         {
-            await DocumentDBRepository<Recepy>.DeleteItemAsync(id);
+            if (Recepy == null)
+                ModelState.AddModelError("", "Please specify an object of type Recepy.");
+
+            if (Recepy.Id == 0)
+                ModelState.AddModelError("Id", "Unable to update a Recepy that doesn't exist yet.");
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            using (IRedisClient redis = redisClientsManager.GetClient())
+            {
+                var repo = redis.As<Recepy>();
+                Recepy.Id = repo.GetNextSequence();
+                repo.Store(Recepy);
+            }
+            return Ok();
         }
     }
 }

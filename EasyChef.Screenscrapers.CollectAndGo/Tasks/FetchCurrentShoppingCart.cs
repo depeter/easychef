@@ -15,15 +15,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Tasks
 
         public override FetchCurrentShoppingCartRequest Start(FetchCurrentShoppingCartRequest message)
         {
-            Page<LoginPage>().Login("peter.meir@gmail.com", "collect&go");
-
-            Page<NavigationPage>().NavigateTo(Navigation.ShoppingCart);
-
-            var products = Page<ShoppingCartPage>().GetProducts();
-
             
-
-            return message;
         }
     }
 }

@@ -6,9 +6,19 @@ using System.Linq;
 
 namespace EasyChef.Screenscrapers.CollectAndGo
 {
-    public static class SeleniumWorkerFactory
+    public interface ISeleniumWorkerFactory
     {
-        internal static Task<TRequest> StartWorker<TRequest>(TRequest message) where TRequest : MessageBusMessage
+        Task<TRequest> StartWorker<TRequest>(TRequest message) where TRequest : MessageBusMessage;
+    }
+
+    public class SeleniumWorkerFactory : ISeleniumWorkerFactory
+    {
+        public SeleniumWorkerFactory()
+        {
+
+        }
+
+        public Task<TRequest> StartWorker<TRequest>(TRequest message) where TRequest : MessageBusMessage
         {
             // find the seleniumworker that handles this requesttype
             Type type = typeof(SeleniumWorker<TRequest>);
