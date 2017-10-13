@@ -6,16 +6,23 @@ using MassTransit.RabbitMqTransport;
 using Microsoft.Extensions.DependencyInjection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using EasyChef.Shared.RestClients;
+using System.Net.Http;
+using EasyChef.Shared.Models;
 
 namespace EasyChef.Screenscrapers.CollectAndGo
 {
     public class Program
     {
+        public static ServiceProvider ServiceProvider;
+
         public static void Main(string[] args)
         {
-            var serviceProvider = new ServiceCollection()
+            ServiceProvider = new ServiceCollection()
             .AddLogging()
             .AddScoped<IConsumer<FetchCurrentShoppingCartRequest>, FetchCurrentShoppingCartConsumer>()
+            .AddScoped<HttpClient>()
+            .AddScoped<IShoppingCartRestClient, ShoppingCartRestClient>()
             .BuildServiceProvider();
 
             const string rabbitMqServerUrl = "rabbitmq://localhost";
@@ -61,18 +68,21 @@ namespace EasyChef.Screenscrapers.CollectAndGo
 
     public class FetchCurrentShoppingCartConsumer : SeleniumTask<FetchCurrentShoppingCartRequest>, IConsumer<FetchCurrentShoppingCartRequest>
     {
-        public FetchCurrentShoppingCartConsumer()
+        async Task IConsumer<FetchCurrentShoppingCartRequest>.Consume(ConsumeContext<FetchCurrentShoppingCartRequest> context)
         {
-
-        }
-
-        Task IConsumer<FetchCurrentShoppingCartRequest>.Consume(ConsumeContext<FetchCurrentShoppingCartRequest> context)
-        {
+            var shoppingCart = new ShoppingCart()
+            {
+                UserId = 1
+            };
+            
             Page<LoginPage>().Login("peter.meir@gmail.com", "collect&go");
             Page<NavigationPage>().NavigateTo(Navigation.ShoppingCart);
-            var products = Page<ShoppingCartPage>().GetProducts();
+            shoppingCart.Products = Page<ShoppingCartPage>().GetProducts();
 
-            return Task.FromResult(0);
+            var shoppingCartRestClient = new ShoppingCartRestClient(new HttpClient(), "http://localhost:54711");
+            var result = await shoppingCartRestClient.Post(shoppingCart);
+            await context.CompleteTask;
+            return;
         }
     }
 
