@@ -35,7 +35,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo
             var instance = Activator.CreateInstance(workerType);
 
             // start the worker
-            return Task.FromResult((instance as SeleniumWorker<TRequest>).Start(message));
+            return Task.FromResult((instance as SeleniumTask<TRequest>).Start(message));
         }
     }
 }
