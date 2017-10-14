@@ -1,13 +1,13 @@
 ﻿using EasyChef.Shared.Infrastructure;
+using EasyChef.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using EasyChef.Shared.Models;
 
 namespace EasyChef.Shared.Messages
 {
-    public class FetchCurrentShoppingCartResponse : MessageBusMessage
+    public class ScanCategoriesRequest : MessageBusMessage
     {
-        public ShoppingCart ShoppingCart { get; set; }
+        
     }
 }

@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace EasyChef.Screenscrapers.CollectAndGo
+namespace EasyChef.Screenscrapers.CollectAndGo.Pages
 {
     public abstract class Page
     {

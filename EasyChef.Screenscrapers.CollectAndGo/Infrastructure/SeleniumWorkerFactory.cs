@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using System;
 using System.Reflection;
 using System.Linq;
+using EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks;
 
-namespace EasyChef.Screenscrapers.CollectAndGo
+namespace EasyChef.Screenscrapers.CollectAndGo.Infrastructure
 {
     public interface ISeleniumWorkerFactory
     {
@@ -21,7 +22,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo
         public Task<TRequest> StartWorker<TRequest>(TRequest message) where TRequest : MessageBusMessage
         {
             // find the seleniumworker that handles this requesttype
-            Type type = typeof(SeleniumWorker<TRequest>);
+            Type type = typeof(SeleniumTask<TRequest>);
             var workerType = Assembly.GetAssembly(type).GetTypes().Where(myType => myType.IsClass && 
                                                                                    !myType.IsAbstract && 
                                                                                    myType.IsSubclassOf(type) && 

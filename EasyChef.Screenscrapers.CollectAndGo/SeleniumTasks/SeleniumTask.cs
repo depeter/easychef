@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace EasyChef.Screenscrapers.CollectAndGo
+namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
 {
     public abstract class SeleniumTask<TRequest>
     {

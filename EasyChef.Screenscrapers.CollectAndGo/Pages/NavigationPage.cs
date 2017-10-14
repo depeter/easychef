@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenQA.Selenium;
 
-namespace EasyChef.Screenscrapers.CollectAndGo
+namespace EasyChef.Screenscrapers.CollectAndGo.Pages
 {
     public class NavigationPage : Page
     {
@@ -16,6 +16,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo
             switch (navigation)
             {
                 case Navigation.Home:
+                case Navigation.ShoppingPage:
                     _driver.FindElement(By.ClassName("logo")).Click();
                     break;
                 case Navigation.ShoppingCart:
@@ -30,6 +31,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo
     public enum Navigation
     {
         Home = 0,
-        ShoppingCart = 1
+        ShoppingCart = 1,
+        ShoppingPage = 2
     }
 }

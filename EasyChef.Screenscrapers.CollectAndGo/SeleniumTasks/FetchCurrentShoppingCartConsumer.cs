@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using EasyChef.Shared.RestClients;
 using System.Net.Http;
 using EasyChef.Shared.Models;
+using EasyChef.Screenscrapers.CollectAndGo.Pages;
 
-namespace EasyChef.Screenscrapers.CollectAndGo
+namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
 {
     public class FetchCurrentShoppingCartConsumer : SeleniumTask<FetchCurrentShoppingCartRequest>, IConsumer<FetchCurrentShoppingCartRequest>
     {
@@ -19,7 +20,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo
                     UserId = 1
                 };
 
-                Page<LoginPage>().Login("peter.meir@gmail.com", "collect&go");
+                Page<LoginPage>().Login();
                 Page<NavigationPage>().NavigateTo(Navigation.ShoppingCart);
                 shoppingCart.Products = Page<ShoppingCartPage>().GetProducts();
 

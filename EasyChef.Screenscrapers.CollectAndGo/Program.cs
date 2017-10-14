@@ -5,9 +5,15 @@ using MassTransit.RabbitMqTransport;
 using Microsoft.Extensions.DependencyInjection;
 using EasyChef.Shared.RestClients;
 using System.Net.Http;
+using EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks;
 
 namespace EasyChef.Screenscrapers.CollectAndGo
 {
+    public static class Config
+    {
+        public const string API_URL = "http://localhost:63262/";
+    }
+
     public class Program
     {
         public static ServiceProvider ServiceProvider;

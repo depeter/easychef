@@ -4,7 +4,7 @@ using System.Text;
 using OpenQA.Selenium;
 using EasyChef.Shared.Models;
 
-namespace EasyChef.Screenscrapers.CollectAndGo
+namespace EasyChef.Screenscrapers.CollectAndGo.Pages
 {
     public class ShoppingCartPage : Page
     {

@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace EasyChef.Screenscrapers.CollectAndGo
+namespace EasyChef.Screenscrapers.CollectAndGo.Pages
 {
     public class LoginPage : Page
     {
@@ -9,8 +9,11 @@ namespace EasyChef.Screenscrapers.CollectAndGo
 
         }
 
-        public void Login(string email, string password)
+        public void Login()
         {
+            string email = "peter.meir@gmail.com";
+            string password = "collect&go";
+
             _driver.Navigate().GoToUrl("https://www.collectandgo.be/cogo/nl/aanmelden");
             _driver.SwitchTo().Frame(0);
             var inputLogin = _driver.FindElement(By.Id("loginName"));
