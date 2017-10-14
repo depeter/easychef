@@ -30,25 +30,25 @@ namespace EasyChef.Shared.RestClients
         }
 
         public async Task<HttpResult> Delete(long id) {
-            var response = await httpClient.DeleteAsync(apiBaseUrl + "/ShoppingCart" + id);
+            var response = await httpClient.DeleteAsync(apiBaseUrl + "/api/ShoppingCart" + id);
             return TransformResponse(response);
         }
 
         public async Task<HttpResult<ShoppingCart>> Get(long id) {
-            var response = await httpClient.GetAsync(apiBaseUrl + "/ShoppingCart" + id);
+            var response = await httpClient.GetAsync(apiBaseUrl + "/api/ShoppingCart" + id);
             return await TransformResponse<ShoppingCart>(response);
         }
 
         public async Task<HttpResult<IList<ShoppingCart>>> GetByUser(long userId) {
-            var response = await httpClient.GetAsync(apiBaseUrl + "/ShoppingCart/GetByUser/" + userId);
+            var response = await httpClient.GetAsync(apiBaseUrl + "/api/ShoppingCart/GetByUser/" + userId);
             return await TransformResponse<IList<ShoppingCart>>(response);
         }
         public async Task<HttpResult> Post(ShoppingCart shoppingCart) {
-            var response = await httpClient.PostAsync(apiBaseUrl + "/ShoppingCart", new StringContent(JsonConvert.SerializeObject(shoppingCart), Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(apiBaseUrl + "/api/ShoppingCart", new StringContent(JsonConvert.SerializeObject(shoppingCart), Encoding.UTF8, "application/json"));
             return await TransformResponse<ShoppingCart>(response);
         }
         public async Task<HttpResult> Put(ShoppingCart shoppingCart) {
-            var response = await httpClient.PutAsync(apiBaseUrl + "/ShoppingCart", new StringContent(JsonConvert.SerializeObject(shoppingCart), Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(apiBaseUrl + "/api/ShoppingCart", new StringContent(JsonConvert.SerializeObject(shoppingCart), Encoding.UTF8, "application/json"));
             return await TransformResponse<ShoppingCart>(response);
         }
     }

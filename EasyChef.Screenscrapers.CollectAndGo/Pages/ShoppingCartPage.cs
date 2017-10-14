@@ -12,7 +12,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo
         {
         }
 
-        public IEnumerable<Product> GetProducts() {
+        public IList<Product> GetProducts() {
             var productDivs = _driver.FindElements(By.CssSelector("#articles .product"));
 
             var response = new List<Product>();

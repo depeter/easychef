@@ -49,12 +49,14 @@ namespace EasyChef.API.Controllers
             using (IRedisClient redis = redisClientsManager.GetClient())
             {
                 var repo = redis.As<ShoppingCart>();
-                return Ok(repo.GetById(id));
+                var shoppingCart = repo.GetById(id);
+                shoppingCart.Products = repo.GetRelatedEntities<Product>(id);
+                return Ok(shoppingCart);
             }
         }
 
         [HttpPost]
-        public ActionResult Post(ShoppingCart shoppingCart)
+        public ActionResult Post([FromBody]ShoppingCart shoppingCart)
         {
             if (shoppingCart == null)
                 ModelState.AddModelError("", "Please specify an object of type ShoppingCart.");
@@ -67,6 +69,12 @@ namespace EasyChef.API.Controllers
                 var repo = redis.As<ShoppingCart>();
                 shoppingCart.Id = repo.GetNextSequence();
                 repo.Store(shoppingCart);
+                long prodId = redis.As<Product>().GetNextSequence();
+                foreach (var prod in shoppingCart.Products) { 
+                    prod.Id = prodId;
+                    prodId++;
+                }
+                repo.StoreRelatedEntities(shoppingCart.Id, shoppingCart.Products.ToArray());
             }
             return Ok();
         }
