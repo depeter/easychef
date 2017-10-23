@@ -1,4 +1,5 @@
 ﻿using EasyChef.Screenscrapers.CollectAndGo.Pages;
+using EasyChef.Screenscrapers.CollectAndGo.Windows;
 using EasyChef.Shared.Messages;
 using EasyChef.Shared.Models;
 using EasyChef.Shared.RestClients;
@@ -13,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
 {
-    public class AddItemsToShoppingCartConsumer : IConsumer<AddItemsToShoppingCartRequest>
+    public class ScanProductsForCategoryConsumer : SeleniumTask<ScanProductsForCategoryRequest>, IConsumer<ScanProductsForCategoryRequest>
     {
         public IWebDriver Driver { get; set; }
 
-        public AddItemsToShoppingCartConsumer()
+        public ScanProductsForCategoryConsumer()
         {
             
         }
@@ -27,7 +28,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
             return (T)Activator.CreateInstance(typeof(T), Driver);
         }
 
-        async Task IConsumer<AddItemsToShoppingCartRequest>.Consume(ConsumeContext<AddItemsToShoppingCartRequest> context)
+        async Task IConsumer<ScanProductsForCategoryRequest>.Consume(ConsumeContext<ScanProductsForCategoryRequest> context)
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
@@ -36,7 +37,10 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
                 Page<LoginPage>().Login();
                 Page<NavigationPage>().NavigateTo(Navigation.Home);
 
-                
+                Page<ShoppingPage>().OpenCategory(context.Message.Category);
+
+                Page<ShoppingPage>().ScanProducts();
+
                 var shoppingCartRestClient = new ShoppingCartRestClient(new HttpClient(), Config.API_URL);
             }
             catch (Exception)

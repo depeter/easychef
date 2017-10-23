@@ -70,6 +70,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Pages
                 c.Link = innerLink.GetAttribute("href");
                 c.Name = innerLink.Text;
                 c.Parent = parentCategory;
+                c.HasProducts = liItem.GetAttribute("class").Contains("leaf");
 
                 categories.Add(c);
             }

@@ -6,7 +6,8 @@ using System.Text;
 
 namespace EasyChef.Shared.Messages
 {
-    public class ScanCategoriesRequest : MessageBusMessage
+    public class ScanProductsForCategoryRequest : MessageBusMessage
     {
+        public string Category { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EasyChef.Screenscrapers.CollectAndGo.Pages;
+using EasyChef.Screenscrapers.CollectAndGo.Windows;
 using EasyChef.Shared.Messages;
 using EasyChef.Shared.Models;
 using EasyChef.Shared.RestClients;
@@ -65,15 +66,13 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
         private IList<Category> ScanChildCategories(CategoryRestClient categoryRestClient, Category parent, IWebDriver driver)
         {
             Page<ShoppingPage>(driver).OpenCategory(parent);
-
+            
             var childCategories = Page<ShoppingPage>(driver).ListAllChildCategories(parent);
 
             for (int j = 0; j < childCategories.Count; j++)
             {
                 var result = categoryRestClient.Post(childCategories[j]).Result;
                 childCategories.Add(result.Content);
-
-                parent.Children = ScanChildCategories(categoryRestClient, childCategories[j], driver);
             }
             return childCategories;
         }

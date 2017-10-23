@@ -1,4 +1,5 @@
 ﻿using EasyChef.Screenscrapers.CollectAndGo.Pages;
+using EasyChef.Screenscrapers.CollectAndGo.Windows;
 using EasyChef.Shared.Messages;
 using EasyChef.Shared.Models;
 using EasyChef.Shared.RestClients;
