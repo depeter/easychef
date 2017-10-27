@@ -25,7 +25,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
             return (T)Activator.CreateInstance(typeof(T), Driver);
         }
 
-        async Task IConsumer<FetchCurrentShoppingCartRequest>.Consume(ConsumeContext<FetchCurrentShoppingCartRequest> context)
+        async Task IConsumer<FetchCurrentShoppingCartRequest>.Consume()
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
@@ -49,7 +49,6 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
             }
             finally
             {
-                await context.CompleteTask;
                 Driver.Close();
                 Driver.Dispose();
             }

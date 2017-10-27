@@ -10,7 +10,10 @@ namespace EasyChef.Backend.Rest.Repositories
 
     public class CategoryRepo : GenericRepository<DBContext, Category>, ICategoryRepo
     {
+        public CategoryRepo(DBContext db) : base(db)
+        {
 
+        }
     }
 
 }

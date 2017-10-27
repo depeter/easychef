@@ -8,6 +8,7 @@ namespace EasyChef.Shared.Models
     {
         public long Id { get; set; }
         public long UserId { get; set; }
-        public IList<Product> Products { get; set; }
+
+        public virtual IList<Product> Products { get; set; }
     }
 }

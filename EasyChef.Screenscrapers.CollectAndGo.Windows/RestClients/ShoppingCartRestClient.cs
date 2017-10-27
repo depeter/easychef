@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyChef.Shared.RestClients
+namespace EasyChef.RestClients
 {
     public interface IShoppingCartRestClient
     {

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using EasyChef.Shared.Models;
-using StackExchange.Redis;
-using ServiceStack.Redis;
 
 namespace EasyChef.API.Controllers
 {
@@ -14,11 +7,8 @@ namespace EasyChef.API.Controllers
     [Route("api/Recepy")]
     public class RecepyController : Controller
     {
-        private readonly IRedisClientsManager redisClientsManager;
-
-        public RecepyController(IRedisClientsManager redisClientsManager)
+        public RecepyController()
         {
-            this.redisClientsManager = redisClientsManager;
         }
 
         [Route("api/Recepy/{id:long}")]
@@ -31,11 +21,12 @@ namespace EasyChef.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            using (IRedisClient redis = redisClientsManager.GetClient())
-            {
-                var repo = redis.As<Recepy>();
-                return Ok(repo.GetById(id));
-            }
+            //using (IRedisClient redis = redisClientsManager.GetClient())
+            //{
+            //    var repo = redis.As<Recepy>();
+            //    return Ok(repo.GetById(id));
+            //}
+            return Ok();
         }
 
         [Route("api/Recepy")]
@@ -48,12 +39,12 @@ namespace EasyChef.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            using (IRedisClient redis = redisClientsManager.GetClient())
-            {
-                var repo = redis.As<Recepy>();
-                Recepy.Id = repo.GetNextSequence();
-                repo.Store(Recepy);
-            }
+            //using (IRedisClient redis = redisClientsManager.GetClient())
+            //{
+            //    var repo = redis.As<Recepy>();
+            //    Recepy.Id = repo.GetNextSequence();
+            //    repo.Store(Recepy);
+            //}
             return Ok();
         }
 
@@ -64,19 +55,20 @@ namespace EasyChef.API.Controllers
             if (id <= 0)
                 ModelState.AddModelError("", "Please specify a valid Recepy id.");
 
-            using (IRedisClient redis = redisClientsManager.GetClient())
-            {
-                var repo = redis.As<Recepy>();
+            //using (IRedisClient redis = redisClientsManager.GetClient())
+            //{
+            //    var repo = redis.As<Recepy>();
 
-                if (repo.GetById(id) == null)
-                    ModelState.AddModelError("Id", "Unable to find a Recepy with the specified id.");
+            //    if (repo.GetById(id) == null)
+            //        ModelState.AddModelError("Id", "Unable to find a Recepy with the specified id.");
 
-                if (!ModelState.IsValid)
-                    return BadRequest();
+            //    if (!ModelState.IsValid)
+            //        return BadRequest();
 
-                repo.Delete(repo.GetById(id));
-                return Ok();
-            }
+            //    repo.Delete(repo.GetById(id));
+            //    return Ok();
+            //}
+            return Ok();
         }
 
         [Route("api/Recepy")]
@@ -92,12 +84,12 @@ namespace EasyChef.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            using (IRedisClient redis = redisClientsManager.GetClient())
-            {
-                var repo = redis.As<Recepy>();
-                Recepy.Id = repo.GetNextSequence();
-                repo.Store(Recepy);
-            }
+            //using (IRedisClient redis = redisClientsManager.GetClient())
+            //{
+            //    var repo = redis.As<Recepy>();
+            //    Recepy.Id = repo.GetNextSequence();
+            //    repo.Store(Recepy);
+            //}
             return Ok();
         }
     }

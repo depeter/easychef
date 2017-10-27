@@ -1,6 +1,7 @@
 ﻿using EasyChef.Backend.Rest.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -20,7 +21,10 @@ namespace EasyChef.Backend.Rest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddTransient<DBContext>(x => new DBContext());
+            services.AddDbContext<DBContext>((builder) => {
+                builder.UseSqlite("Data Source=EasyChefDB");
+            }, ServiceLifetime.Transient);
+            services.AddTransient<ICategoryRepo, CategoryRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

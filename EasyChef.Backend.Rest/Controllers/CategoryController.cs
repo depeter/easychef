@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using EasyChef.Shared.Models;
-using StackExchange.Redis;
-using ServiceStack.Redis;
 using EasyChef.Backend.Rest.Repositories;
 
 namespace EasyChef.API.Controllers
@@ -88,7 +82,7 @@ namespace EasyChef.API.Controllers
 
             original.Link = category.Link;
             original.Name = category.Name;
-            original.Parent = category.Parent;
+            //original.Parent = category.Parent;
             original.HasProducts = category.HasProducts;
 
             _categoryRepo.Edit(original);

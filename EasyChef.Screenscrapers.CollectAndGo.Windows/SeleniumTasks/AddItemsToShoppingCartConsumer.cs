@@ -14,6 +14,11 @@ using System.Threading.Tasks;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
 {
+    public interface IConsumer<T>
+    {
+        Task Consume();
+    }
+
     public class AddItemsToShoppingCartConsumer : IConsumer<AddItemsToShoppingCartRequest>
     {
         public IWebDriver Driver { get; set; }
@@ -28,7 +33,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
             return (T)Activator.CreateInstance(typeof(T), Driver);
         }
 
-        async Task IConsumer<AddItemsToShoppingCartRequest>.Consume(ConsumeContext<AddItemsToShoppingCartRequest> context)
+        async Task IConsumer<AddItemsToShoppingCartRequest>.Consume()
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
@@ -46,7 +51,6 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
             }
             finally
             {
-                await context.CompleteTask;
                 Driver.Close();
                 Driver.Dispose();
             }

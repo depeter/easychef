@@ -15,49 +15,47 @@ namespace EasyChef.Backend.Rest.Repositories
         void Save();
     }
 
-    public abstract class GenericRepository<C, T> : IGenericRepository<T> where T : class where C : DBContext, new()
+    public abstract class GenericRepository<C, T> : IGenericRepository<T> where T : class where C : DBContext
     {
-
-        private C _entities = new C();
-        public C Context
+        public GenericRepository(C db)
         {
-
-            get { return _entities; }
-            set { _entities = value; }
+            _db = db;
         }
+
+        private C _db;
         
         public virtual IQueryable<T> GetAll()
         {
 
-            IQueryable<T> query = _entities.Set<T>();
+            IQueryable<T> query = _db.Set<T>();
             return query;
         }
 
         public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
 
-            IQueryable<T> query = _entities.Set<T>().Where(predicate);
+            IQueryable<T> query = _db.Set<T>().Where(predicate);
             return query;
         }
 
         public virtual void Add(T entity)
         {
-            _entities.Set<T>().Add(entity);
+            _db.Set<T>().Add(entity);
         }
 
         public virtual void Delete(T entity)
         {
-            _entities.Set<T>().Remove(entity);
+            _db.Set<T>().Remove(entity);
         }
 
         public virtual void Edit(T entity)
         {
-            _entities.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _db.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
         }
 
         public virtual void Save()
         {
-            _entities.SaveChanges();
+            _db.SaveChanges();
         }
     }
 }

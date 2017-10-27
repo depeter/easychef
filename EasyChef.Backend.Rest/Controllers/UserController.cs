@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using EasyChef.Shared.Models;
-using StackExchange.Redis;
-using ServiceStack.Redis;
 
 namespace EasyChef.API.Controllers
 {
@@ -14,11 +8,8 @@ namespace EasyChef.API.Controllers
     [Route("api/User")]
     public class UserController : Controller
     {
-        private readonly IRedisClientsManager redisClientsManager;
-
-        public UserController(IRedisClientsManager redisClientsManager)
+        public UserController()
         {
-            this.redisClientsManager = redisClientsManager;
         }
 
         [Route("api/User/{id:long}")]
@@ -31,11 +22,12 @@ namespace EasyChef.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            using (IRedisClient redis = redisClientsManager.GetClient())
-            {
-                var repo = redis.As<User>();
-                return Ok(repo.GetById(id));
-            }
+            //using (IRedisClient redis = redisClientsManager.GetClient())
+            //{
+            //    var repo = redis.As<User>();
+            //    return Ok(repo.GetById(id));
+            //}
+            return Ok();
         }
 
         [Route("api/User")]
@@ -48,12 +40,12 @@ namespace EasyChef.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            using (IRedisClient redis = redisClientsManager.GetClient())
-            {
-                var repo = redis.As<User>();
-                User.Id = repo.GetNextSequence();
-                repo.Store(User);
-            }
+            //using (IRedisClient redis = redisClientsManager.GetClient())
+            //{
+            //    var repo = redis.As<User>();
+            //    User.Id = repo.GetNextSequence();
+            //    repo.Store(User);
+            //}
             return Ok();
         }
 
@@ -64,19 +56,17 @@ namespace EasyChef.API.Controllers
             if (id <= 0)
                 ModelState.AddModelError("", "Please specify a valid User id.");
 
-            using (IRedisClient redis = redisClientsManager.GetClient())
-            {
-                var repo = redis.As<User>();
-
-                if (repo.GetById(id) == null)
-                    ModelState.AddModelError("Id", "Unable to find a User with the specified id.");
-
-                if (!ModelState.IsValid)
-                    return BadRequest();
-
-                repo.Delete(repo.GetById(id));
-                return Ok();
-            }
+            //
+            //    if (repo.GetById(id) == null)
+            //        ModelState.AddModelError("Id", "Unable to find a User with the specified id.");
+            //
+            //    if (!ModelState.IsValid)
+            //        return BadRequest();
+            //
+            //    repo.Delete(repo.GetById(id));
+            //    return Ok();
+            //}
+            return Ok();
         }
 
         [Route("api/User")]
@@ -92,12 +82,12 @@ namespace EasyChef.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            using (IRedisClient redis = redisClientsManager.GetClient())
-            {
-                var repo = redis.As<User>();
-                User.Id = repo.GetNextSequence();
-                repo.Store(User);
-            }
+            //using (IRedisClient redis = redisClientsManager.GetClient())
+            //{
+            //    var repo = redis.As<User>();
+            //    User.Id = repo.GetNextSequence();
+            //    repo.Store(User);
+            //}
             return Ok();
         }
     }

@@ -42,7 +42,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Pages
             var innerLink = liItem.FindElement(By.TagName("a"));
 
             var c = new Category();
-            c.Id = long.Parse(liItem.GetAttribute("id"));
+            c.ExternalId = long.Parse(liItem.GetAttribute("id"));
             c.Link = innerLink.GetAttribute("href");
             c.Name = innerLink.Text;
             c.Parent = null;
@@ -66,7 +66,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Pages
                 var innerLink = liItem.FindElement(By.TagName("a"));
 
                 var c = new Category();
-                c.Id = long.Parse(liItem.GetAttribute("id"));
+                c.ExternalId = long.Parse(liItem.GetAttribute("id"));
                 c.Link = innerLink.GetAttribute("href");
                 c.Name = innerLink.Text;
                 c.Parent = parentCategory;

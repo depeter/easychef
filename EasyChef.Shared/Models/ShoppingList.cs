@@ -4,6 +4,6 @@ namespace EasyChef.Shared.Models
 {
     public class ShoppingList
     {
-        public IList<Product> Products { get; set; }
+        public virtual IList<Product> Products { get; set; }
     }
 }

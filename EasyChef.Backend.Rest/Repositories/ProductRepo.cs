@@ -9,5 +9,9 @@ namespace EasyChef.Backend.Rest.Repositories
     public interface IProductRepo : IGenericRepository<Product> { }
     public class ProductRepo : GenericRepository<DBContext, Product>, IProductRepo
     {
+        public ProductRepo(DBContext db) : base(db)
+        {
+
+        }
     }
 }

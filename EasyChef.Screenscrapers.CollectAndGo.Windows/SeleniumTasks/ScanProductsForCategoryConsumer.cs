@@ -28,7 +28,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
             return (T)Activator.CreateInstance(typeof(T), Driver);
         }
 
-        async Task IConsumer<ScanProductsForCategoryRequest>.Consume(ConsumeContext<ScanProductsForCategoryRequest> context)
+        async Task IConsumer<ScanProductsForCategoryRequest>.Consume()
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
@@ -37,7 +37,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
                 Page<LoginPage>().Login();
                 Page<NavigationPage>().NavigateTo(Navigation.Home);
 
-                Page<ShoppingPage>().OpenCategory(context.Message.Category);
+                
 
                 Page<ShoppingPage>().ScanProducts();
 
@@ -49,7 +49,6 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
             }
             finally
             {
-                await context.CompleteTask;
                 Driver.Close();
                 Driver.Dispose();
             }
