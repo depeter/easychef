@@ -1,4 +1,5 @@
 using EasyChef.Backend.Rest.Repositories;
+using EasyChef.Contracts.Shared.Models;
 using EasyChef.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,15 +13,15 @@ namespace EasyChef.Backend.Rest.Test
         [TestMethod]
         public void CanCreateCategory()
         {
-            var repo = new CategoryRepo(new DBContext((new DbContextOptionsBuilder()).UseInMemoryDatabase("test").Options));
-            repo.Add(new Shared.Models.Category() {
-                Name = "dsfsdf",
-                //Children = new List<Category>(),
-                //Parent = null,
-                HasProducts = false,
-                Link = ""
-            });
-            repo.Save();
+            //var repo = new CategoryRepo(new DBContext((new DbContextOptionsBuilder()).UseInMemoryDatabase("test").Options));
+            //repo.Add(new Category() {
+            //    Name = "dsfsdf",
+            //    //Children = new List<Category>(),
+            //    //Parent = null,
+            //    HasProducts = false,
+            //    Link = ""
+            //});
+            //repo.Save();
         }
     }
 }

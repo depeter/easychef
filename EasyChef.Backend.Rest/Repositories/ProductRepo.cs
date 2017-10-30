@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Product = EasyChef.Backend.Rest.Models.Product;
 
 namespace EasyChef.Backend.Rest.Repositories
 {

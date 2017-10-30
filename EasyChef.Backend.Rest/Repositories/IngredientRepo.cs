@@ -1,4 +1,5 @@
 ﻿using EasyChef.Shared.Models;
+using Ingredient = EasyChef.Backend.Rest.Models.Ingredient;
 
 namespace EasyChef.Backend.Rest.Repositories
 {

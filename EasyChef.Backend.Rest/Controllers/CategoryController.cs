@@ -1,19 +1,24 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using EasyChef.Shared.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using EasyChef.Backend.Rest.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Category = EasyChef.Backend.Rest.Models.Category;
+using EasyChef.Contracts.Shared.Models;
 
-namespace EasyChef.API.Controllers
+namespace EasyChef.Backend.Rest.Controllers
 {
     [Produces("application/json")]
     [Route("api/Category")]
     public class CategoryController : Controller
     {
-        private ICategoryRepo _categoryRepo;
+        private readonly ICategoryRepo _categoryRepo;
+        private readonly IMapper _mapper;
 
-        public CategoryController(ICategoryRepo categoryRepo)
+        public CategoryController(ICategoryRepo categoryRepo, IMapper mapper)
         {
             _categoryRepo = categoryRepo;
+            _mapper = mapper;
         }
 
         [HttpGet("{id:long}")]
@@ -30,19 +35,31 @@ namespace EasyChef.API.Controllers
             return Ok(category);
         }
 
-        [HttpPost]
-        public ActionResult Post([FromBody]Category category)
+        [HttpGet]
+        public ActionResult List(bool withProductsOnly = true)
         {
+            if(withProductsOnly)
+                return Ok(_mapper.Map<IList<CategoryDTO>>(_categoryRepo.GetAllWithProducts()));
+
+            return Ok(_mapper.Map<IList<CategoryDTO>>(_categoryRepo.GetAll()));
+        }
+
+
+        [HttpPost]
+        public ActionResult Post([FromBody]CategoryDTO category)
+        {
+            var entity = _mapper.Map<Category>(category);
+
             if (category == null)
-                ModelState.AddModelError("", "Please specify an object of type Category.");
+                ModelState.AddModelError("", "Please specify an object of type CategoryDTO.");
 
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            _categoryRepo.Add(category);
+            _categoryRepo.Add(entity);
             _categoryRepo.Save();
 
-            return Ok(category);
+            return Ok(_mapper.Map<CategoryDTO>(entity));
         }
 
         [HttpDelete("{id:long}")]
@@ -65,12 +82,12 @@ namespace EasyChef.API.Controllers
         }
 
         [HttpPut]
-        public ActionResult Put(Category category)
+        public ActionResult Put([FromBody]CategoryDTO category)
         {
             if (category == null)
                 ModelState.AddModelError("", "Please specify an object of type Category.");
 
-            if (category.Id == 0)
+            if (category?.Id == 0)
                 ModelState.AddModelError("Id", "Unable to update a Category that doesn't exist yet.");
 
             if (!ModelState.IsValid)
@@ -84,6 +101,7 @@ namespace EasyChef.API.Controllers
             original.Name = category.Name;
             //original.Parent = category.Parent;
             original.HasProducts = category.HasProducts;
+            original.Children = _mapper.Map<IList<Category>>(category.Children);
 
             _categoryRepo.Edit(original);
             _categoryRepo.Save();

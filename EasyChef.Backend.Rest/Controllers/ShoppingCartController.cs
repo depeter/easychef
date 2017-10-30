@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using EasyChef.Shared.Models;
+using ShoppingCart = EasyChef.Backend.Rest.Models.ShoppingCart;
 
 namespace EasyChef.API.Controllers
 {

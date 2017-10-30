@@ -1,5 +1,4 @@
 ﻿using EasyChef.Shared.Infrastructure;
-using EasyChef.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using EasyChef.Shared.RestClients;
 using System.Net.Http;
+using EasyChef.Contracts.Shared.Models;
 using EasyChef.Shared.Models;
 using EasyChef.Screenscrapers.CollectAndGo.Pages;
 using OpenQA.Selenium;
@@ -31,7 +32,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
 
             try
             {
-                var shoppingCart = new ShoppingCart()
+                var shoppingCart = new ShoppingCartDTO()
                 {
                     UserId = 1
                 };

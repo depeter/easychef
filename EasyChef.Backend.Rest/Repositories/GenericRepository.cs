@@ -22,7 +22,7 @@ namespace EasyChef.Backend.Rest.Repositories
             _db = db;
         }
 
-        private C _db;
+        protected C _db;
         
         public virtual IQueryable<T> GetAll()
         {
@@ -40,6 +40,7 @@ namespace EasyChef.Backend.Rest.Repositories
 
         public virtual void Add(T entity)
         {
+            _db.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;
             _db.Set<T>().Add(entity);
         }
 

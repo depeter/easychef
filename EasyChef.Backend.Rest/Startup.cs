@@ -1,4 +1,5 @@
-﻿using EasyChef.Backend.Rest.Repositories;
+﻿using AutoMapper;
+using EasyChef.Backend.Rest.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,9 +22,12 @@ namespace EasyChef.Backend.Rest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<DBContext>((builder) => {
-                builder.UseSqlite("Data Source=EasyChefDB");
-            }, ServiceLifetime.Transient);
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddDbContext<DBContext>((builder) =>
+            {
+                builder.UseSqlite("Data Source=EasyChef.db");
+            });
             services.AddTransient<ICategoryRepo, CategoryRepo>();
         }
 
@@ -36,6 +40,7 @@ namespace EasyChef.Backend.Rest
             }
 
             app.UseMvc();
+
         }
     }
 }

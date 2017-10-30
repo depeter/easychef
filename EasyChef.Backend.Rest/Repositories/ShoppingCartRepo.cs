@@ -1,4 +1,5 @@
 ﻿using EasyChef.Shared.Models;
+using ShoppingCart = EasyChef.Backend.Rest.Models.ShoppingCart;
 
 namespace EasyChef.Backend.Rest.Repositories
 {

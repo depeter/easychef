@@ -1,4 +1,5 @@
 ﻿using EasyChef.Shared.Models;
+using HouseHold = EasyChef.Backend.Rest.Models.HouseHold;
 
 namespace EasyChef.Backend.Rest.Repositories
 {

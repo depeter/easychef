@@ -1,4 +1,5 @@
 ﻿using EasyChef.Shared.Models;
+using Recepy = EasyChef.Backend.Rest.Models.Recepy;
 
 namespace EasyChef.Backend.Rest.Repositories
 {

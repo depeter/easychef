@@ -5,16 +5,17 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using EasyChef.Contracts.Shared.Models;
 
 namespace EasyChef.Shared.RestClients
 {
     public interface IShoppingCartRestClient
     {
         Task<HttpResult> Delete(long id);
-        Task<HttpResult<ShoppingCart>> Get(long id);
-        Task<HttpResult<IList<ShoppingCart>>> GetByUser(long userId);
-        Task<HttpResult> Post(ShoppingCart shoppingCart);
-        Task<HttpResult> Put(ShoppingCart shoppingCart);
+        Task<HttpResult<ShoppingCartDTO>> Get(long id);
+        Task<HttpResult<IList<ShoppingCartDTO>>> GetByUser(long userId);
+        Task<HttpResult> Post(ShoppingCartDTO shoppingCartDTO);
+        Task<HttpResult> Put(ShoppingCartDTO shoppingCartDTO);
     }
 
     public class ShoppingCartRestClient : RestClient, IShoppingCartRestClient
@@ -29,26 +30,26 @@ namespace EasyChef.Shared.RestClients
         }
 
         public async Task<HttpResult> Delete(long id) {
-            var response = await httpClient.DeleteAsync(apiBaseUrl + "/api/ShoppingCart" + id);
+            var response = await httpClient.DeleteAsync(apiBaseUrl + "/api/ShoppingCartDTO" + id);
             return TransformResponse(response);
         }
 
-        public async Task<HttpResult<ShoppingCart>> Get(long id) {
-            var response = await httpClient.GetAsync(apiBaseUrl + "/api/ShoppingCart" + id);
-            return await TransformResponse<ShoppingCart>(response);
+        public async Task<HttpResult<ShoppingCartDTO>> Get(long id) {
+            var response = await httpClient.GetAsync(apiBaseUrl + "/api/ShoppingCartDTO" + id);
+            return await TransformResponse<ShoppingCartDTO>(response);
         }
 
-        public async Task<HttpResult<IList<ShoppingCart>>> GetByUser(long userId) {
-            var response = await httpClient.GetAsync(apiBaseUrl + "/api/ShoppingCart/GetByUser/" + userId);
-            return await TransformResponse<IList<ShoppingCart>>(response);
+        public async Task<HttpResult<IList<ShoppingCartDTO>>> GetByUser(long userId) {
+            var response = await httpClient.GetAsync(apiBaseUrl + "/api/ShoppingCartDTO/GetByUser/" + userId);
+            return await TransformResponse<IList<ShoppingCartDTO>>(response);
         }
-        public async Task<HttpResult> Post(ShoppingCart shoppingCart) {
-            var response = await httpClient.PostAsync(apiBaseUrl + "/api/ShoppingCart", new StringContent(JsonConvert.SerializeObject(shoppingCart), Encoding.UTF8, "application/json"));
-            return await TransformResponse<ShoppingCart>(response);
+        public async Task<HttpResult> Post(ShoppingCartDTO shoppingCartDTO) {
+            var response = await httpClient.PostAsync(apiBaseUrl + "/api/ShoppingCartDTO", new StringContent(JsonConvert.SerializeObject(shoppingCartDTO), Encoding.UTF8, "application/json"));
+            return await TransformResponse<ShoppingCartDTO>(response);
         }
-        public async Task<HttpResult> Put(ShoppingCart shoppingCart) {
-            var response = await httpClient.PutAsync(apiBaseUrl + "/api/ShoppingCart", new StringContent(JsonConvert.SerializeObject(shoppingCart), Encoding.UTF8, "application/json"));
-            return await TransformResponse<ShoppingCart>(response);
+        public async Task<HttpResult> Put(ShoppingCartDTO shoppingCartDTO) {
+            var response = await httpClient.PutAsync(apiBaseUrl + "/api/ShoppingCartDTO", new StringContent(JsonConvert.SerializeObject(shoppingCartDTO), Encoding.UTF8, "application/json"));
+            return await TransformResponse<ShoppingCartDTO>(response);
         }
     }
 

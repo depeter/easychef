@@ -1,34 +1,24 @@
-﻿using EasyChef.Screenscrapers.CollectAndGo.Pages;
-using EasyChef.Screenscrapers.CollectAndGo.Windows;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using EasyChef.Contracts.Shared.RestClients;
+using EasyChef.Screenscrapers.CollectAndGo.Pages;
+using EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks;
 using EasyChef.Shared.Messages;
-using EasyChef.Shared.Models;
-using EasyChef.Shared.RestClients;
-using MassTransit;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
+namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class ScanProductsForCategoryConsumer : SeleniumTask<ScanProductsForCategoryRequest>, IConsumer<ScanProductsForCategoryRequest>
+    public class ScanProductsForCategoryConsumer : SeleniumTask<ScanProductsForCategoryRequest>
     {
-        public IWebDriver Driver { get; set; }
-
-        public ScanProductsForCategoryConsumer()
-        {
-            
-        }
-
         public T Page<T>()
         {
             return (T)Activator.CreateInstance(typeof(T), Driver);
         }
 
-        async Task IConsumer<ScanProductsForCategoryRequest>.Consume()
+        public async Task Consume()
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
@@ -37,11 +27,24 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
                 Page<LoginPage>().Login();
                 Page<NavigationPage>().NavigateTo(Navigation.Home);
 
-                
+                var categoryRestClient = new CategoryRestClient(new HttpClient(), Config.API_URL);
+                var productRestClient = new ProductRestClient(new HttpClient(), Config.API_URL);
 
-                Page<ShoppingPage>().ScanProducts();
+                var result = await categoryRestClient.List();
+                if (result.HttpStatus != HttpStatusCode.OK)
+                    return;
 
-                var shoppingCartRestClient = new ShoppingCartRestClient(new HttpClient(), Config.API_URL);
+                foreach (var category in result.Content)
+                {
+                    Driver.Navigate().GoToUrl(category.Link);
+
+                    var products = Page<ShoppingPage>().ScanProducts(category.Id);
+                    foreach (var product in products)
+                    {
+                        product.CategoryId = category.Id;
+                        await productRestClient.Post(product);
+                    }
+                }
             }
             catch (Exception)
             {

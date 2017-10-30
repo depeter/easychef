@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EasyChef.Contracts.Shared.Models;
 using OpenQA.Selenium;
 using EasyChef.Shared.Models;
 
@@ -12,13 +13,13 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Pages
         {
         }
 
-        public IList<Product> GetProducts() {
+        public IList<ProductDTO> GetProducts() {
             var productDivs = _driver.FindElements(By.CssSelector("#articles .product"));
 
-            var response = new List<Product>();
+            var response = new List<ProductDTO>();
             foreach (var div in productDivs)
             {
-                var p = new Product();
+                var p = new ProductDTO();
                 p.Name = div.FindElement(By.ClassName("product__name")).Text;
                 p.Description = div.FindElement(By.ClassName("product__description")).Text;
                 p.Weight = div.FindElement(By.ClassName("product__weight")).Text;

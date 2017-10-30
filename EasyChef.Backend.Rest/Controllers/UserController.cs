@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using EasyChef.Shared.Models;
+using User = EasyChef.Backend.Rest.Models.User;
 
 namespace EasyChef.API.Controllers
 {

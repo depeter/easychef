@@ -1,5 +1,13 @@
 ﻿using EasyChef.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Category = EasyChef.Backend.Rest.Models.Category;
+using HouseHold = EasyChef.Backend.Rest.Models.HouseHold;
+using Ingredient = EasyChef.Backend.Rest.Models.Ingredient;
+using Product = EasyChef.Backend.Rest.Models.Product;
+using Recepy = EasyChef.Backend.Rest.Models.Recepy;
+using RecepyPreparation = EasyChef.Backend.Rest.Models.RecepyPreparation;
+using ShoppingCart = EasyChef.Backend.Rest.Models.ShoppingCart;
+using ShoppingList = EasyChef.Backend.Rest.Models.ShoppingList;
 
 namespace EasyChef.Backend.Rest.Repositories
 {

@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EasyChef.Backend.Rest\EasyChef.Backend.Rest.csproj" />
+    <ProjectReference Include="..\EasyChef.Contracts.Shared\EasyChef.Contracts.Shared.csproj" />
   </ItemGroup>
 
 </Project>
