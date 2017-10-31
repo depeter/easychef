@@ -14,7 +14,7 @@ namespace EasyChef.Contracts.Shared.RestClients
         Task<HttpResult<CategoryDTO>> Get(long id);
         Task<HttpResult<CategoryDTO>> Post(CategoryDTO categoryDto);
         Task<HttpResult<CategoryDTO>> Put(CategoryDTO categoryDto);
-        Task<HttpResult<IList<CategoryDTO>>> List();
+        Task<HttpResult<IList<CategoryDTO>>> List(bool withProductsOnly = false);
     }
 
     public class CategoryRestClient : RestClient, ICategoryRestClient
@@ -29,28 +29,38 @@ namespace EasyChef.Contracts.Shared.RestClients
         }
 
         public async Task<HttpResult> Delete(long id) {
-            var response = await _httpClient.DeleteAsync(_apiBaseUrl + "/api/Category" + id);
+            var response = await _httpClient.DeleteAsync(_apiBaseUrl + "/api/Category/" + id);
             return TransformResponse(response);
         }
 
         public async Task<HttpResult<CategoryDTO>> Get(long id) {
-            var response = await _httpClient.GetAsync(_apiBaseUrl + "/api/Category" + id);
+            var response = await _httpClient.GetAsync(_apiBaseUrl + "/api/Category/" + id);
             return await TransformResponse<CategoryDTO>(response);
         }
 
         public async Task<HttpResult<CategoryDTO>> Post(CategoryDTO categoryDto) {
-            var response = await _httpClient.PostAsync(_apiBaseUrl + "/api/Category", new StringContent(JsonConvert.SerializeObject(categoryDto), Encoding.UTF8, "application/json"));
+            var response = await _httpClient.PostAsync(_apiBaseUrl + "/api/Category", 
+                new StringContent(JsonConvert.SerializeObject(categoryDto, Formatting.Indented, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+                    }), 
+                Encoding.UTF8, "application/json"));
             return await TransformResponse<CategoryDTO>(response);
         }
 
         public async Task<HttpResult<CategoryDTO>> Put(CategoryDTO categoryDto) {
-            var response = await _httpClient.PutAsync(_apiBaseUrl + "/api/Category", new StringContent(JsonConvert.SerializeObject(categoryDto), Encoding.UTF8, "application/json"));
+            var response = await _httpClient.PutAsync(_apiBaseUrl + "/api/Category", 
+                new StringContent(JsonConvert.SerializeObject(categoryDto, Formatting.Indented, new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+                }), 
+                Encoding.UTF8, "application/json"));
             return await TransformResponse<CategoryDTO>(response);
         }
 
-        public async Task<HttpResult<IList<CategoryDTO>>> List()
+        public async Task<HttpResult<IList<CategoryDTO>>> List(bool withProductsOnly = false)
         {
-            var response = await _httpClient.GetAsync(_apiBaseUrl + "/api/Category/List");
+            var response = await _httpClient.GetAsync(_apiBaseUrl + "/api/Category/List?withProductsOnly=" + withProductsOnly);
             return await TransformResponse<IList<CategoryDTO>>(response);
         }
     }

@@ -7,6 +7,8 @@ using EasyChef.Screenscrapers.CollectAndGo.Pages;
 using EasyChef.Shared.RestClients;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using EasyChef.Screenscrapers.CollectAndGo.Windows.Infrastructure;
+using EasyChef.Screenscrapers.CollectAndGo.Windows.Pages;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
@@ -27,6 +29,8 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
                 var categoryRestClient = new CategoryRestClient(new HttpClient(), Config.API_URL);
 
                 Page<LoginPage>(driver).Login();
+
+                driver.WaitUntilLoadingFinished();
 
                 Page<NavigationPage>(driver).NavigateTo(Navigation.ShoppingPage);
 
@@ -64,12 +68,17 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 
             var childCategories = Page<ShoppingPage>(driver).ListAllChildCategories(parent);
 
-            for (int j = 0; j < childCategories.Count; j++)
+            foreach (CategoryDTO category in childCategories)
             {
-                if (childCategories[j].Id == 0)
+                if (category.Id == 0)
                 {
-                    var result = categoryRestClient.Post(childCategories[j]).Result;
-                    childCategories[j] = result.Content;
+                    if (category.HasChildren) { 
+                        // scan all child child categories
+                        Page<ShoppingPage>(driver).ScanAllChildChildCategories(category);
+                    }
+
+                    var result = categoryRestClient.Post(category).Result;
+                    category.Id = result.Content.Id;
                 }
             }
         }

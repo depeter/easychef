@@ -68,7 +68,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeleniumTasks\AddItemsToShoppingCartConsumer.cs" />
-    <Compile Include="SeleniumTasks\FetchCurrentShoppingCartConsumer.cs" />
+    <Compile Include="SeleniumTasks\SyncCurrentShoppingCartConsumer.cs" />
     <Compile Include="SeleniumTasks\ScanCategoriesConsumer.cs" />
     <Compile Include="SeleniumTasks\ScanProductsForCategoryConsumer.cs" />
     <Compile Include="SeleniumTasks\SeleniumTask.cs" />

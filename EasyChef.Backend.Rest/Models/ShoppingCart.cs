@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EasyChef.Backend.Rest.Models
 {
@@ -6,6 +7,8 @@ namespace EasyChef.Backend.Rest.Models
     {
         public long Id { get; set; }
         public long UserId { get; set; }
-        public IList<Backend.Rest.Models.Product> Products { get; set; }
+        public IList<ShoppingCartProduct> ShoppingCartProducts { get; set; }
+        public DateTime? LastScan { get; set; }
+        public User User { get; set; }
     }
 }

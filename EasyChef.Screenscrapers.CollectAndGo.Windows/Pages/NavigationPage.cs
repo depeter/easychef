@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EasyChef.Screenscrapers.CollectAndGo.Windows.Infrastructure;
 using OpenQA.Selenium;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Pages
@@ -25,6 +26,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Pages
                 default:
                     break;
             }
+            _driver.WaitUntilLoadingFinished();
         }
     }
 

@@ -35,7 +35,8 @@ namespace EasyChef.Backend.Rest.Controllers
             return Ok(category);
         }
 
-        [HttpGet]
+        [HttpGet()]
+        [Route("List/{withProductsOnly=withProductsOnly}")]
         public ActionResult List(bool withProductsOnly = true)
         {
             if(withProductsOnly)
@@ -56,10 +57,25 @@ namespace EasyChef.Backend.Rest.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
+            saveTheChildren(entity);
+
             _categoryRepo.Add(entity);
             _categoryRepo.Save();
 
             return Ok(_mapper.Map<CategoryDTO>(entity));
+        }
+
+        private void saveTheChildren(Category category)
+        {
+            if (category.Children != null && category.Children.Count >= 0)
+            {
+                foreach (var childCategory in category.Children)
+                {
+                    childCategory.Parent = category;
+                    _categoryRepo.Add(childCategory);
+                    saveTheChildren(childCategory);
+                }
+            }
         }
 
         [HttpDelete("{id:long}")]

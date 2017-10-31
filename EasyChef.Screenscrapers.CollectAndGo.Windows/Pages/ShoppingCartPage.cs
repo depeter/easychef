@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using EasyChef.Contracts.Shared.Models;
+using EasyChef.Screenscrapers.CollectAndGo.Pages;
 using OpenQA.Selenium;
-using EasyChef.Shared.Models;
 
-namespace EasyChef.Screenscrapers.CollectAndGo.Pages
+namespace EasyChef.Screenscrapers.CollectAndGo.Windows.Pages
 {
     public class ShoppingCartPage : Page
     {

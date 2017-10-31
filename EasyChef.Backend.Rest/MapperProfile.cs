@@ -13,6 +13,7 @@ namespace EasyChef.Backend.Rest
         public MapperProfile()
         {
             CreateMapBothWays<CategoryDTO, Category>();
+            CreateMapBothWays<ProductDTO, Product>();
         }
 
         private void CreateMapBothWays<TIn, TOut>()

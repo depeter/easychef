@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
 namespace EasyChef.Backend.Rest.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20171030140605_AddAvailableAtUrlToCategory")]
+    partial class AddAvailableAtUrlToCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,10 +30,6 @@ namespace EasyChef.Backend.Rest.Migrations
                     b.Property<long>("ExternalId");
 
                     b.Property<bool>("HasProducts");
-
-                    b.Property<DateTime?>("LastProductScan");
-
-                    b.Property<DateTime?>("LastScan");
 
                     b.Property<string>("Link");
 
@@ -56,8 +52,6 @@ namespace EasyChef.Backend.Rest.Migrations
                     b.Property<int>("CategoryId");
 
                     b.Property<string>("Description");
-
-                    b.Property<DateTime?>("LastScan");
 
                     b.Property<string>("Name");
 

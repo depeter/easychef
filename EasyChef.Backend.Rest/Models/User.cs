@@ -4,5 +4,6 @@
     {
         public long Id { get; set; }
         public string FirstName { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
     }
 }

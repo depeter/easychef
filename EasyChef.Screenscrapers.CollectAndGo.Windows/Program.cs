@@ -1,10 +1,4 @@
-﻿using EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks;
+﻿using EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows
 {
@@ -17,12 +11,14 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows
     {
         static void Main(string[] args)
         {
-            var y = new ScanCategoriesConsumer();
-            y.Consume();
+            //var y = new ScanCategoriesConsumer();
+            //y.Consume();
 
-            var x = new ScanProductsForCategoryConsumer();
-            x.Consume().Wait();
+            //var x = new ScanProductsForCategoryConsumer();
+            //x.Consume().Wait();
 
+            var z = new SyncCurrentShoppingCartConsumer();
+            z.Consume().Wait();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using EasyChef.Backend.Rest.Repositories;
@@ -52,6 +53,8 @@ namespace EasyChef.Backend.Rest.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest();
+
+            entity.LastScan = DateTime.Now;
 
             _productRepo.Add(entity);
             _productRepo.Save();

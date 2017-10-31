@@ -29,6 +29,7 @@ namespace EasyChef.Backend.Rest
                 builder.UseSqlite("Data Source=EasyChef.db");
             });
             services.AddTransient<ICategoryRepo, CategoryRepo>();
+            services.AddTransient<IProductRepo, ProductRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

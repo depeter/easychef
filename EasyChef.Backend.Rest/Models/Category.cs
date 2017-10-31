@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,8 +16,12 @@ namespace EasyChef.Backend.Rest.Models
         public bool HasProducts { get; set; }
         public virtual IList<Category> Children { get; set; }
         public Category Parent { get; set; }
+        public int? ParentId { get; set; }
         public string Link { get; set; }
         public virtual IList<Product> Products { get; set; }
+        public string AvailableOnUrl { get; set; }
+        public DateTime? LastScan { get; set; }
+        public DateTime? LastProductScan { get; set; }
     }
 }
 

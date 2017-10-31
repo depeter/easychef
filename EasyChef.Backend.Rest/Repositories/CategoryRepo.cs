@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Category = EasyChef.Backend.Rest.Models.Category;
 
 namespace EasyChef.Backend.Rest.Repositories
@@ -21,7 +19,9 @@ namespace EasyChef.Backend.Rest.Repositories
 
         public IList<Category> GetAllWithProducts()
         {
-            return _db.Categories.Where(x => x.HasProducts).ToList();
+            return _db.Categories.Where(x => x.HasProducts)
+                                 .Where(x => !x.LastProductScan.HasValue || x.LastProductScan.Value < DateTime.Today.AddDays(-10))
+                                 .ToList();
         }
     }
 

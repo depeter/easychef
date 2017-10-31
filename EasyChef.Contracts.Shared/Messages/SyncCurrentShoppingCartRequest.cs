@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EasyChef.Shared.Messages
 {
-    public class FetchCurrentShoppingCartRequest : MessageBusMessage
+    public class SyncCurrentShoppingCartRequest : MessageBusMessage
     {
         public long UserId { get; set; }
     }

@@ -1,4 +1,7 @@
-﻿namespace EasyChef.Backend.Rest.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace EasyChef.Backend.Rest.Models
 {
     public class Product
     {
@@ -12,5 +15,8 @@
         public virtual Category Category { get; set; }
         public string UnitPrice { get; set; }
         public string Unit { get; set; }
+        public DateTime? LastScan { get; set; }
+
+        public virtual IList<ShoppingCartProduct> ShoppingCartProduct { get; set; }
     }
 }
