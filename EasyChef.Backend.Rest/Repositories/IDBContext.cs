@@ -7,7 +7,6 @@ using Product = EasyChef.Backend.Rest.Models.Product;
 using Recepy = EasyChef.Backend.Rest.Models.Recepy;
 using RecepyPreparation = EasyChef.Backend.Rest.Models.RecepyPreparation;
 using ShoppingCart = EasyChef.Backend.Rest.Models.ShoppingCart;
-using ShoppingList = EasyChef.Backend.Rest.Models.ShoppingList;
 
 namespace EasyChef.Backend.Rest.Repositories
 {
@@ -20,6 +19,5 @@ namespace EasyChef.Backend.Rest.Repositories
         DbSet<Recepy> Recepies { get; set; }
         DbSet<RecepyPreparation> RecepyPreparations { get; set; }
         DbSet<ShoppingCart> ShoppingCarts { get; set; }
-        DbSet<ShoppingList> ShoppingLists { get; set; }
     }
 }

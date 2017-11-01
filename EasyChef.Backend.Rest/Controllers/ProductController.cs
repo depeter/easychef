@@ -36,6 +36,21 @@ namespace EasyChef.Backend.Rest.Controllers
             return Ok(product);
         }
 
+        [HttpGet("{sku:long}")]
+        [Route("GetBySku/{sku:long}")]
+        public ActionResult GetBySku(long sku)
+        {
+            if (sku <= 0)
+                ModelState.AddModelError("", "Please specify a valid Product sku.");
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var product = _productRepo.FindBy(x => x.SKU == sku.ToString()).FirstOrDefault();
+
+            return Ok(product);
+        }
+
         [HttpGet]
         public ActionResult List()
         {

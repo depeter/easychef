@@ -36,7 +36,10 @@ namespace EasyChef.Backend.Rest
 
             modelBuilder.Entity<ShoppingCart>().HasKey(x => x.Id);
             modelBuilder.Entity<ShoppingCart>().HasMany(x => x.ShoppingCartProducts).WithOne(x => x.ShoppingCart);
+            modelBuilder.Entity<ShoppingCart>().HasOne(x => x.User).WithOne(x => x.ShoppingCart);
 
+            modelBuilder.Entity<ShoppingCartProduct>().HasKey(x => new { x.ProductId, x.ShoppingCartId });
+            
             modelBuilder.Entity<User>().HasKey(x => x.Id);
             modelBuilder.Entity<User>().HasOne(x => x.ShoppingCart).WithOne(x => x.User);
         }

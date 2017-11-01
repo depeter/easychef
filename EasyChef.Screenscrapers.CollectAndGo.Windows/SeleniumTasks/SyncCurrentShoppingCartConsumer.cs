@@ -1,43 +1,60 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using EasyChef.Contracts.Shared.Models;
+using EasyChef.Contracts.Shared.RestClients;
 using EasyChef.Screenscrapers.CollectAndGo.Pages;
-using EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks;
 using EasyChef.Screenscrapers.CollectAndGo.Windows.Pages;
-using EasyChef.Shared.Messages;
 using EasyChef.Shared.RestClients;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class SyncCurrentShoppingCartConsumer : SeleniumTask<SyncCurrentShoppingCartRequest>
+    public class SyncCurrentShoppingCartConsumer : SeleniumTask
     {
-        public IWebDriver Driver { get; set; }
-        
-        public T Page<T>()
-        {
-            return (T)Activator.CreateInstance(typeof(T), Driver);
-        }
 
         public async Task Consume()
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
+            var shoppingCartRestClient = new ShoppingCartRestClient(new HttpClient(), Config.API_URL);
+            var productRestClient = new ProductRestClient(new HttpClient(), Config.API_URL);
+
             try
             {
-                var shoppingCart = new ShoppingCartDTO()
+                var currentUserId = 1;
+                var shoppingCart = shoppingCartRestClient.GetByUser(currentUserId).Result.Content;
+
+                if (shoppingCart == null)
                 {
-                    UserId = 1
-                };
+                    shoppingCart = new ShoppingCartDTO()
+                    {
+                        UserId = currentUserId
+                    };
+                }
+                shoppingCart.ShoppingCartProducts = new List<ShoppingCartProductDTO>();
 
                 Page<LoginPage>().Login();
                 Page<NavigationPage>().NavigateTo(Navigation.ShoppingCart);
-                shoppingCart.Products = Page<ShoppingCartPage>().GetProducts();
+                var skus = Page<ShoppingCartPage>().GetProductSkus();
+                foreach (var sku in skus)
+                {
+                    var product = productRestClient.GetBySku(sku).Result.Content;
+                    if (product != null)
+                    {
+                        shoppingCart.ShoppingCartProducts.Add(new ShoppingCartProductDTO()
+                        {
+                            ShoppingCart = shoppingCart,
+                            ProductId = product.Id
+                        });
+                    }
+                }
 
-                var shoppingCartRestClient = new ShoppingCartRestClient(new HttpClient(), Config.API_URL);
-                await shoppingCartRestClient.Post(shoppingCart);
+                if(shoppingCart.Id == 0)
+                    await shoppingCartRestClient.Post(shoppingCart);
+                else
+                    await shoppingCartRestClient.Put(shoppingCart);
             }
             catch (Exception)
             {

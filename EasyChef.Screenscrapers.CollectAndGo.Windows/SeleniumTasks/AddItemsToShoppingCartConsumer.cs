@@ -1,42 +1,19 @@
-﻿using EasyChef.Screenscrapers.CollectAndGo.Pages;
-using EasyChef.Screenscrapers.CollectAndGo.Windows;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using EasyChef.Screenscrapers.CollectAndGo.Pages;
+using EasyChef.Screenscrapers.CollectAndGo.Windows.Pages;
 using EasyChef.Shared.Messages;
-using EasyChef.Shared.Models;
 using EasyChef.Shared.RestClients;
-using MassTransit;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
+namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public interface IConsumer<T>
+    public class AddItemsToShoppingCartConsumer : SeleniumTask
     {
-        Task Consume();
-    }
-
-    public class AddItemsToShoppingCartConsumer : IConsumer<AddItemsToShoppingCartRequest>
-    {
-        public IWebDriver Driver { get; set; }
-
-        public AddItemsToShoppingCartConsumer()
+        public void Consume()
         {
-            
-        }
-
-        public T Page<T>()
-        {
-            return (T)Activator.CreateInstance(typeof(T), Driver);
-        }
-
-        async Task IConsumer<AddItemsToShoppingCartRequest>.Consume()
-        {
-            Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
-
             try
             {
                 Page<LoginPage>().Login();
@@ -44,6 +21,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
 
                 
                 var shoppingCartRestClient = new ShoppingCartRestClient(new HttpClient(), Config.API_URL);
+
             }
             catch (Exception)
             {

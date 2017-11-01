@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using EasyChef.Contracts.Shared.RestClients;
 using EasyChef.Screenscrapers.CollectAndGo.Pages;
-using EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks;
 using EasyChef.Screenscrapers.CollectAndGo.Windows.Pages;
 using EasyChef.Shared.Messages;
 using OpenQA.Selenium;
@@ -12,13 +11,8 @@ using OpenQA.Selenium.Chrome;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class ScanProductsForCategoryConsumer : SeleniumTask<ScanProductsForCategoryRequest>
+    public class ScanProductsForCategoryConsumer : SeleniumTask
     {
-        public T Page<T>()
-        {
-            return (T)Activator.CreateInstance(typeof(T), Driver);
-        }
-
         public async Task Consume()
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });

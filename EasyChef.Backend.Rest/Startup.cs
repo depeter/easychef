@@ -30,6 +30,8 @@ namespace EasyChef.Backend.Rest
             });
             services.AddTransient<ICategoryRepo, CategoryRepo>();
             services.AddTransient<IProductRepo, ProductRepo>();
+            services.AddTransient<IShoppingCartRepo, ShoppingCartRepo>();
+            services.AddTransient<IShoppingCartProductRepo, ShoppingCartProductRepo>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

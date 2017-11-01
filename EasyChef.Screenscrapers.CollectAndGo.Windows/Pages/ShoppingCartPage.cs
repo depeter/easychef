@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using EasyChef.Contracts.Shared.Models;
+using EasyChef.Contracts.Shared.RestClients;
 using EasyChef.Screenscrapers.CollectAndGo.Pages;
 using OpenQA.Selenium;
 
@@ -11,18 +12,13 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.Pages
         {
         }
 
-        public IList<ProductDTO> GetProducts() {
+        public IList<string> GetProductSkus() {
             var productDivs = _driver.FindElements(By.CssSelector("#articles .product"));
 
-            var response = new List<ProductDTO>();
+            var response = new List<string>();
             foreach (var div in productDivs)
             {
-                var p = new ProductDTO();
-                p.Name = div.FindElement(By.ClassName("product__name")).Text;
-                p.Description = div.FindElement(By.ClassName("product__description")).Text;
-                p.Weight = div.FindElement(By.ClassName("product__weight")).Text;
-                p.SKU = div.FindElement(By.CssSelector("input[type='hidden'][name='viewArticleNumber']")).GetAttribute("value");
-                response.Add(p);
+                response.Add(div.FindElement(By.CssSelector("input[type='hidden'][name='viewArticleNumber']")).GetAttribute("value"));
             }
             return response;
         }

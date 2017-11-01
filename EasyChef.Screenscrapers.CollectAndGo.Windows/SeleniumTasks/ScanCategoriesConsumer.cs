@@ -12,15 +12,8 @@ using EasyChef.Screenscrapers.CollectAndGo.Windows.Pages;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class ScanCategoriesConsumer
+    public class ScanCategoriesConsumer : SeleniumTask
     {
-        public IWebDriver Driver { get; set; }
-
-        public T Page<T>(IWebDriver driver = null)
-        {
-            return (T)Activator.CreateInstance(typeof(T), driver ?? Driver);
-        }
-
         public void Consume()
         {
             var driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
@@ -28,18 +21,18 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
             {
                 var categoryRestClient = new CategoryRestClient(new HttpClient(), Config.API_URL);
 
-                Page<LoginPage>(driver).Login();
+                Page<LoginPage>().Login();
 
                 driver.WaitUntilLoadingFinished();
 
-                Page<NavigationPage>(driver).NavigateTo(Navigation.ShoppingPage);
+                Page<NavigationPage>().NavigateTo(Navigation.ShoppingPage);
 
-                var parentCategories = Page<ShoppingPage>(driver).ListAllParentCategories();
+                var parentCategories = Page<ShoppingPage>().ListAllParentCategories();
                 while (parentCategories.Count == 0)
                 {
                     System.Threading.Thread.Sleep(3000);
-                    Page<NavigationPage>(driver).NavigateTo(Navigation.ShoppingPage);
-                    parentCategories = Page<ShoppingPage>(driver).ListAllParentCategories();
+                    Page<NavigationPage>().NavigateTo(Navigation.ShoppingPage);
+                    parentCategories = Page<ShoppingPage>().ListAllParentCategories();
                 }
 
                 for (int i = 0; i < parentCategories.Count; i++)
@@ -47,7 +40,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
                     var result = categoryRestClient.Post(parentCategories[i]).Result;
                     parentCategories[i] = result.Content;
 
-                    ScanChildCategories(categoryRestClient, parentCategories[i], driver);
+                    ScanChildCategories(categoryRestClient, parentCategories[i]);
                 }
             }
             catch (Exception ex)
@@ -62,11 +55,11 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
             }
         }
 
-        private void ScanChildCategories(CategoryRestClient categoryRestClient, CategoryDTO parent, IWebDriver driver)
+        private void ScanChildCategories(CategoryRestClient categoryRestClient, CategoryDTO parent)
         {
-            Page<ShoppingPage>(driver).OpenCategory(parent);
+            Page<ShoppingPage>().OpenCategory(parent);
 
-            var childCategories = Page<ShoppingPage>(driver).ListAllChildCategories(parent);
+            var childCategories = Page<ShoppingPage>().ListAllChildCategories(parent);
 
             foreach (CategoryDTO category in childCategories)
             {
@@ -74,7 +67,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
                 {
                     if (category.HasChildren) { 
                         // scan all child child categories
-                        Page<ShoppingPage>(driver).ScanAllChildChildCategories(category);
+                        Page<ShoppingPage>().ScanAllChildChildCategories(category);
                     }
 
                     var result = categoryRestClient.Post(category).Result;

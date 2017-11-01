@@ -59,7 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Infrastructure\SeleniumExtensions.cs" />
-    <Compile Include="Infrastructure\SeleniumWorkerFactory.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\NavigationPage.cs" />
     <Compile Include="Pages\Page.cs" />

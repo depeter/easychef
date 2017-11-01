@@ -13,6 +13,7 @@ namespace EasyChef.Contracts.Shared.RestClients
         Task<HttpResult<ProductDTO>> Get(long id);
         Task<HttpResult<ProductDTO>> Post(ProductDTO productDto);
         Task<HttpResult<ProductDTO>> Put(ProductDTO productDto);
+        Task<HttpResult<ProductDTO>> GetBySku(string sku);
     }
 
     public class ProductRestClient : RestClient, IProductRestClient
@@ -57,6 +58,12 @@ namespace EasyChef.Contracts.Shared.RestClients
                     ReferenceLoopHandling = ReferenceLoopHandling.Serialize
                 }),
                 Encoding.UTF8, "application/json"));
+            return await TransformResponse<ProductDTO>(response);
+        }
+
+        public async Task<HttpResult<ProductDTO>> GetBySku(string sku)
+        {
+            var response = await _httpClient.GetAsync(_apiBaseUrl + "/api/Product/GetBySku/" + sku);
             return await TransformResponse<ProductDTO>(response);
         }
     }

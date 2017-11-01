@@ -1,4 +1,6 @@
-﻿namespace EasyChef.Contracts.Shared.Models
+﻿using System.Collections.Generic;
+
+namespace EasyChef.Contracts.Shared.Models
 {
     public class ProductDTO
     {
@@ -12,5 +14,7 @@
         public virtual CategoryDTO Category { get; set; }
         public string UnitPrice { get; set; }
         public string Unit { get; set; }
+
+        public virtual IList<ShoppingCartProductDTO> ShoppingCartProducts { get; set; }
     }
 }

@@ -1,23 +1,15 @@
 ﻿using System;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
-namespace EasyChef.Screenscrapers.CollectAndGo.SeleniumTasks
+namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public abstract class SeleniumTask<TRequest>
+    public abstract class SeleniumTask
     {
         public IWebDriver Driver { get; set; }
 
-        public SeleniumTask()
+        public T Page<T>()
         {
-            
+            return (T)Activator.CreateInstance(typeof(T), Driver);
         }
-
-        public virtual TRequest Start(TRequest message)
-        {
-            return default(TRequest);
-        }
-
-        
     }
 }

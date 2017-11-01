@@ -9,7 +9,6 @@ namespace EasyChef.Backend.Rest.Models
     {
         public virtual ShoppingCart ShoppingCart { get; set; }
         public virtual Product Product { get; set; }
-
         public int ProductId { get; set; }
         public int ShoppingCartId { get; set; }
     }
