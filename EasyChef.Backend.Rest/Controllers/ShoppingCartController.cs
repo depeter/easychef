@@ -130,7 +130,7 @@ namespace EasyChef.API.Controllers
 
             _shoppingCartRepo.Save();
 
-            return Ok(original);
+            return Ok(_mapper.Map<ShoppingCartDTO>(original));
         }
     }
 }
