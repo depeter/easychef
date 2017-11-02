@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
+using EasyChef.Contracts.Shared.Messages;
 using EasyChef.Contracts.Shared.Models;
 using EasyChef.Contracts.Shared.RestClients;
 using EasyChef.Screenscrapers.CollectAndGo.Pages;
@@ -9,12 +11,13 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using EasyChef.Screenscrapers.CollectAndGo.Windows.Infrastructure;
 using EasyChef.Screenscrapers.CollectAndGo.Windows.Pages;
+using MassTransit;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class ScanCategoriesConsumer : SeleniumTask
+    public class ScanCategoriesConsumer : SeleniumTask, IConsumer<RequestScanCategoriesMessage>
     {
-        public void Consume()
+        public Task Consume(ConsumeContext<RequestScanCategoriesMessage> context)
         {
             var driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
             try
@@ -42,11 +45,18 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 
                     ScanChildCategories(categoryRestClient, parentCategories[i]);
                 }
+
+                context.Publish(new ScrapingJobResultMessage() { Success = true, MessageId = context.MessageId });
+
+                return Console.Out.WriteLineAsync("All categories scanned.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+
+                context.Publish(new ScrapingJobResultMessage() { Success = false, MessageId = context.MessageId });
+
                 // log exception
-                throw ex;
+                throw;
             }
             finally
             {

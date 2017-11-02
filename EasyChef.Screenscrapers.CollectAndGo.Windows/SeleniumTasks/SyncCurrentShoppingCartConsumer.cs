@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using EasyChef.Contracts.Shared.Messages;
 using EasyChef.Contracts.Shared.Models;
 using EasyChef.Contracts.Shared.RestClients;
 using EasyChef.Screenscrapers.CollectAndGo.Pages;
 using EasyChef.Screenscrapers.CollectAndGo.Windows.Pages;
 using EasyChef.Shared.RestClients;
+using MassTransit;
 using OpenQA.Selenium.Chrome;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class SyncCurrentShoppingCartConsumer : SeleniumTask
+    public class SyncCurrentShoppingCartConsumer : SeleniumTask, IConsumer<SyncCurrentShoppingCartMessage>
     {
 
-        public async Task Consume()
+        public Task Consume(ConsumeContext<SyncCurrentShoppingCartMessage> context)
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
@@ -51,13 +53,18 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
                     }
                 }
 
-                if(shoppingCart.Id == 0)
-                    await shoppingCartRestClient.Post(shoppingCart);
+                if (shoppingCart.Id == 0)
+                    shoppingCartRestClient.Post(shoppingCart).Wait();
                 else
-                    await shoppingCartRestClient.Put(shoppingCart);
+                    shoppingCartRestClient.Put(shoppingCart).Wait();
+
+                context.Publish(new ScrapingJobResultMessage() { Success = true, MessageId = context.MessageId });
+
+                return Console.Out.WriteLineAsync("Shoppingcart synched for user " + context.Message.UserId);
             }
             catch (Exception)
             {
+                context.Publish(new ScrapingJobResultMessage() { Success = false, MessageId = context.MessageId });
                 throw;
             }
             finally

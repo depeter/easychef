@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using EasyChef.Screenscrapers.CollectAndGo.Windows.Infrastructure;
+using OpenQA.Selenium;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Pages
 {
@@ -9,11 +10,8 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Pages
 
         }
 
-        public void Login()
+        public bool Login(string email, string password)
         {
-            string email = "peter.meir@gmail.com";
-            string password = "collect&go";
-
             _driver.Navigate().GoToUrl("https://www.collectandgo.be/cogo/nl/aanmelden");
             _driver.SwitchTo().Frame(0);
             var inputLogin = _driver.FindElement(By.Id("loginName"));
@@ -23,6 +21,8 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Pages
             inputPassword.SendKeys(password);
 
             _driver.FindElement(By.CssSelector("button[type='submit']")).Click();
+
+            return _driver.TryFindElement(By.CssSelector(".logout")) != null;
         }
     }
 }

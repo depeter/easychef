@@ -169,5 +169,47 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.Pages
             var finalLink = finalLi.FindElement(By.TagName("a"));
             finalLink.ClickWithJs();
         }
+
+        public void SearchForSku(int sku)
+        {
+            var searchField = _driver.FindElement(By.ClassName("_bSearchField"));
+            searchField.SendKeysJS(sku.ToString());
+
+            var button = _driver.FindElement(By.ClassName("btn-search"));
+            button.Click();
+
+        }
+
+        public IList<ProductDTO> ScanProducts()
+        {
+            var products = new List<ProductDTO>();
+            var productElements = _driver.FindElements(By.CssSelector(".product"));
+            foreach (var productElement in productElements)
+            {
+                var product = new ProductDTO();
+                product.SKU = productElement.GetAttribute("data-productskuid");
+
+                var productBody = productElement.FindElement(By.ClassName("product__body"));
+
+                product.Description = productBody.TryFindElement(By.ClassName("product__description"))?.Text;
+                product.Name = productBody.TryFindElement(By.ClassName("product__name"))?.Text;
+                product.Weight = productBody.TryFindElement(By.ClassName("product__weight"))?.Text;
+                product.Price = productBody.TryFindElement(By.ClassName("displayPrice1"))?.Text;
+                product.UnitPrice = productBody.TryFindElement(By.ClassName("displayUnitPrice1"))?.Text;
+                product.Unit = productBody.TryFindElement(By.ClassName("product__unit"))?.Text;
+
+                products.Add(product);
+            }
+            return products;
+        }
+
+        public void AddProductToCart(int sku)
+        {
+            var button = _driver.TryFindElement(By.ClassName("_btnAddToBasket" + sku)) ?? 
+                         _driver.TryFindElement(By.CssSelector("._order__adjust-quantity"+sku+"[data-role='add']")) ?? 
+                         _driver.TryFindElement(By.ClassName("product__btn")) ??
+                         _driver.TryFindElement(By.CssSelector(".order__adjust-quantity[data-role='add']"));
+            button?.Click();
+        }
     }
 }

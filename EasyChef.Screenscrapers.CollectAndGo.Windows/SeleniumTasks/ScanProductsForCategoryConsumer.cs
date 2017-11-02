@@ -2,18 +2,19 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using EasyChef.Contracts.Shared.Messages;
 using EasyChef.Contracts.Shared.RestClients;
 using EasyChef.Screenscrapers.CollectAndGo.Pages;
 using EasyChef.Screenscrapers.CollectAndGo.Windows.Pages;
-using EasyChef.Shared.Messages;
+using MassTransit;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class ScanProductsForCategoryConsumer : SeleniumTask
+    public class ScanProductsForCategoryConsumer : SeleniumTask, IConsumer<ScanProductsForCategoryMessage>
     {
-        public async Task Consume()
+        public Task Consume(ConsumeContext<ScanProductsForCategoryMessage> context)
         {
             Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
@@ -25,9 +26,9 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
                 var categoryRestClient = new CategoryRestClient(new HttpClient(), Config.API_URL);
                 var productRestClient = new ProductRestClient(new HttpClient(), Config.API_URL);
 
-                var result = await categoryRestClient.List(true);
+                var result = categoryRestClient.List(true).Result;
                 if (result.HttpStatus != HttpStatusCode.OK)
-                    return;
+                    return Task.FromException(new ApplicationException("Failure fetching categories from rest service."));
 
                 foreach (var category in result.Content)
                 {
@@ -41,12 +42,17 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
                     {
                         product.Category = category;
                         product.CategoryId = category.Id;
-                        await productRestClient.Post(product);
+                        productRestClient.Post(product).Wait();
                     }
                 }
+
+                context.Publish(new ScrapingJobResultMessage() { Success = true, MessageId = context.MessageId });
+
+                return Console.Out.WriteLineAsync("All products scanned for all categories with products");
             }
             catch (Exception)
             {
+                context.Publish(new ScrapingJobResultMessage() { Success = false, MessageId = context.MessageId });
                 throw;
             }
             finally

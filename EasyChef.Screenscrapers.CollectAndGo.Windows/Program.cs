@@ -1,4 +1,7 @@
-﻿using EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks;
+﻿using System;
+using System.Diagnostics;
+using EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks;
+using MassTransit;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows
 {
@@ -7,18 +10,40 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows
         public const string API_URL = "http://localhost:63262/";
     }
 
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            //var y = new ScanCategoriesConsumer();
-            //y.Consume();
+            var bus = Bus.Factory.CreateUsingRabbitMq(sbc =>
+            {
+                var host = sbc.Host(new Uri("rabbitmq://localhost"), h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
 
-            //var x = new ScanProductsForCategoryConsumer();
-            //x.Consume().Wait();
+                sbc.ReceiveEndpoint(host, "scan_categories_queue", ep =>
+                {
+                    ep.Consumer<ScanCategoriesConsumer>();
+                });
 
-            var z = new SyncCurrentShoppingCartConsumer();
-            z.Consume().Wait();
+                sbc.ReceiveEndpoint(host, "scan_products_for_category_queue", ep =>
+                {
+                    ep.Consumer<ScanProductsForCategoryConsumer>();
+                });
+
+                sbc.ReceiveEndpoint(host, "sync_shoppingcart_for_user_queue", ep =>
+                {
+                    ep.Consumer<SyncCurrentShoppingCartConsumer>();
+                });
+
+                sbc.ReceiveEndpoint(host, "sync_shoppingcart_for_user_queue", ep =>
+                {
+                    ep.Consumer<AddItemsToShoppingCartConsumer>();
+                });
+            });
+
+            bus.Start();
         }
     }
 }

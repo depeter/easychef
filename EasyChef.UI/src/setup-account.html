@@ -1,0 +1,26 @@
+<template>
+    <section class="au-animate d-block m-x-auto">
+        <h2 class="text-center">${heading}</h2>
+        <h3 class="text-center">${subtitle}</h3>
+        <br/>
+        <h4>Voer je aanmeld gegevens in voor Collect&amp;Go</h4>
+        <br />
+        <form>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Geef je email adres in" value.bind="email">
+                <small id="emailHelp" class="form-text text-muted">We zullen je email nooit delen met anderen.</small>
+            </div>
+            <div class="form-group">
+                <label for="password">Wachtwoord</label>
+                <input type="password" class="form-control" id="password" placeholder="Geef je wachtwoord in" value.bind="password">
+            </div>
+        </form>
+        <div class="text-center">
+            <button class="btn btn-success" click.bind="validate()">
+                <i class="fa fa-check">&nbsp;Ga verder &gt;</i>
+            </button>
+        </div>
+
+    </section>
+</template>

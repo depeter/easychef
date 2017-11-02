@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace skeleton.Controllers
+namespace EasyChef.UI.Controllers
 {
     public class HomeController : Controller
     {

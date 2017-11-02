@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace skeleton
+namespace EasyChef
 {
     public class Startup
     {
@@ -31,10 +31,7 @@ namespace skeleton
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
+                builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();
@@ -47,9 +44,6 @@ namespace skeleton
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-
-            services.AddApplicationInsightsTelemetry(Configuration);
-
             services.AddMvc();
 
             // Add application services.
