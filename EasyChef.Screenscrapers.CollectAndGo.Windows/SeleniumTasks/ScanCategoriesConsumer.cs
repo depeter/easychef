@@ -24,7 +24,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
             {
                 var categoryRestClient = new CategoryRestClient(new HttpClient(), Config.API_URL);
 
-                Page<LoginPage>().Login();
+                Page<LoginPage>().Login(context.Message.Email, context.Message.Password);
 
                 driver.WaitUntilLoadingFinished();
 

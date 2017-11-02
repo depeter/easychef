@@ -1,6 +1,8 @@
-﻿namespace EasyChef.Contracts.Shared.Messages
+﻿using EasyChef.Contracts.Shared.Infrastructure;
+
+namespace EasyChef.Contracts.Shared.Messages
 {
-    public class RequestScanCategoriesMessage
+    public class RequestScanCategoriesMessage : MessageBusMessage
     {
 
     }

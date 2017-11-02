@@ -37,7 +37,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
                 }
                 shoppingCart.ShoppingCartProducts = new List<ShoppingCartProductDTO>();
 
-                Page<LoginPage>().Login();
+                Page<LoginPage>().Login(context.Message.Email, context.Message.Password);
                 Page<NavigationPage>().NavigateTo(Navigation.ShoppingCart);
                 var skus = Page<ShoppingCartPage>().GetProductSkus();
                 foreach (var sku in skus)

@@ -7,12 +7,6 @@ using OpenQA.Selenium.Chrome;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class VerifyLoginMessage
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-
     public class VerifyLoginConsumer : SeleniumTask, IConsumer<VerifyLoginMessage>
 
     {

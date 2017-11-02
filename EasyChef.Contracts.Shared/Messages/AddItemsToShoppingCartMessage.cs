@@ -1,8 +1,15 @@
-﻿namespace EasyChef.Contracts.Shared.Messages
+﻿using EasyChef.Contracts.Shared.Infrastructure;
+
+namespace EasyChef.Contracts.Shared.Messages
 {
-    public class AddItemsToShoppingCartMessage
+    public class AddItemsToShoppingCartMessage : MessageBusMessage
     {
         public int[] SkuNumbers { get; set; }
         public int UserId { get; set; }
+    }
+
+    public class VerifyLoginMessage : MessageBusMessage
+    {
+        
     }
 }

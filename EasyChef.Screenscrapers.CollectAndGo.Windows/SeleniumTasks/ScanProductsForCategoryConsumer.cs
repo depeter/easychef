@@ -20,7 +20,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 
             try
             {
-                Page<LoginPage>().Login();
+                Page<LoginPage>().Login(context.Message.Email, context.Message.Password);
                 Page<NavigationPage>().NavigateTo(Navigation.Home);
 
                 var categoryRestClient = new CategoryRestClient(new HttpClient(), Config.API_URL);

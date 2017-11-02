@@ -20,7 +20,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
             {
                 Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
-                Page<LoginPage>().Login();
+                Page<LoginPage>().Login(context.Message.Email, context.Message.Password);
                 Page<NavigationPage>().NavigateTo(Navigation.ShoppingPage);
 
                 foreach (var sku in context.Message.SkuNumbers)
