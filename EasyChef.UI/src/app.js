@@ -4,7 +4,10 @@ export class App {
     config.map([
         { route: ['', 'setup-info'], name: 'setup-info', moduleId: 'setup-info', nav: false, title: 'Setup Info' },
         { route: 'setup-account', name: 'setup-account', moduleId: 'setup-account',  nav: false, title: 'Setup Account' },
-        { route: 'child-router',  name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' }
+        { route: 'recepies', name: 'recepies', moduleId: 'recepies', nav: true, title: 'Recepten' },
+        { route: 'order', name: 'order', moduleId: 'order', nav: true, title: 'Bestelling' },
+        { route: 'stock', name: 'stock', moduleId: 'stock', nav: true, title: 'Voorraad' },
+        { route: 'settings', name: 'settings', moduleId: 'settings', nav: true, title: 'Instellingen' },
     ]);
 
     this.router = router;

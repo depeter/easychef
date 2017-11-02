@@ -1,5 +1,8 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using EasyChef.Backend.Rest.Repositories;
+using EasyChef.Contracts.Shared.RequestResponse;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +35,31 @@ namespace EasyChef.Backend.Rest
             services.AddTransient<IProductRepo, ProductRepo>();
             services.AddTransient<IShoppingCartRepo, ShoppingCartRepo>();
             services.AddTransient<IShoppingCartProductRepo, ShoppingCartProductRepo>(); 
+
+            // service bus dependencies
+            var address = new Uri("rabbitmq://localhost");
+            var timeout = TimeSpan.FromSeconds(30);
+
+            services.AddSingleton((x) => BusConfiguration(address));
+
+            services.AddTransient<IRequestClient<VerifyLogin, VerifyLoginResponse>>((x) => 
+                new MessageRequestClient<VerifyLogin, VerifyLoginResponse>(x.GetService<IBusControl>(), new Uri(address.OriginalString + "/scrapingjobs_queue"), timeout));
         }
+
+        private static IBusControl BusConfiguration(Uri address)
+        {
+            var bus = Bus.Factory.CreateUsingRabbitMq(sbc =>
+            {
+                sbc.Host(address, h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+            });
+            bus.Start();
+            return bus;
+        }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

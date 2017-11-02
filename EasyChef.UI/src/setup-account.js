@@ -2,15 +2,17 @@ import { inject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { ScrapingService } from 'services/ScrapingService';
 
-@inject(Router)
+@inject(Router, ScrapingService)
 export class SetupAccount {
     heading = 'EasyChef';
     email = '';
     password = '';
     error = '';
+    validating = false;
 
-    constructor(router) {
+    constructor(router, scrapingService) {
         this.router = router;
+        this.scrapingService = scrapingService;
     }
 
     validate() {
@@ -21,11 +23,16 @@ export class SetupAccount {
             error = 'Gelieve je wachtwoord in te geven.';
         }
 
+        this.validating = true;
+        this.scrapingService.verifyLogin(this.email, this.password).then(result => {
+            var validated = result.data;
+            this.validating = false;
 
-    }
-
-    continue() {
-        this.router.navigate('setup-account');
+            if (validated) {
+                this.validating = false;
+                this.router.navigate('recepies');
+            }
+        });
     }
 
     validateEmail(email) {

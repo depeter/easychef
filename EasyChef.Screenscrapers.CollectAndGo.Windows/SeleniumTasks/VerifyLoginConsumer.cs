@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EasyChef.Contracts.Shared.Messages;
+using EasyChef.Contracts.Shared.RequestResponse;
 using EasyChef.Screenscrapers.CollectAndGo.Pages;
 using MassTransit;
 using OpenQA.Selenium.Chrome;
 
 namespace EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks
 {
-    public class VerifyLoginConsumer : SeleniumTask, IConsumer<VerifyLoginMessage>
+    public class VerifyLoginConsumer : SeleniumTask, IConsumer<VerifyLogin>
 
     {
-        public Task Consume(ConsumeContext<VerifyLoginMessage> context)
+        public Task Consume(ConsumeContext<VerifyLogin> context)
         {
             try
             {
                 Driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, new ChromeOptions { Proxy = null });
 
-                if(!Page<LoginPage>().Login(context.Message.Email, context.Message.Password))
-                    context.Publish(new ScrapingJobResultMessage() { Success = false, MessageId = context.MessageId });
+                if(!Page<LoginPage>().Login(context.Message.Login, context.Message.Password))
+                    context.Respond(new VerifyLoginResponse() { Success = false });
 
-                context.Publish(new ScrapingJobResultMessage() { Success = true, MessageId = context.MessageId });
+                context.Respond(new VerifyLoginResponse() { Success = true });
 
-                return Console.Out.WriteLineAsync("Verified login for user " + context.Message.Email);
+                return Console.Out.WriteLineAsync("Verified login for user " + context.Message.Login);
             }
             catch (Exception)
             {
-                context.Publish(new ScrapingJobResultMessage() { Success = false, MessageId = context.MessageId });
+                context.Respond(new VerifyLoginResponse() { Success = false });
 
                 throw;
             }

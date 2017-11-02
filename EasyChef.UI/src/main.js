@@ -1,4 +1,6 @@
 import 'bootstrap';
+import 'fetch';
+import { HttpClient } from 'aurelia-fetch-client';
 
 export function configure(aurelia) {
   aurelia.use
@@ -13,4 +15,27 @@ export function configure(aurelia) {
   //aurelia.use.plugin('aurelia-html-import-template-loader')
 
   aurelia.start().then(() => aurelia.setRoot());
+
+
+  httpClient.configure(config => {
+        config
+            .withBaseUrl('http://localhost:60000/api/')
+            .withDefaults({
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'Fetch'
+                }
+            })
+            .withInterceptor({
+                request(request) {
+                    console.log(`Requesting ${request.method} ${request.url}`);
+                    return request;
+                },
+                response(response) {
+                    console.log(`Received ${response.status} ${response.url}`);
+                    return response;
+                }
+            });
+    });
 }

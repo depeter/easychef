@@ -29,6 +29,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows
                     ep.Consumer<ScanProductsForCategoryConsumer>();
                     ep.Consumer<SyncCurrentShoppingCartConsumer>();
                     ep.Consumer<AddItemsToShoppingCartConsumer>();
+                    ep.Consumer<VerifyLoginConsumer>();
                 });
 
             });
