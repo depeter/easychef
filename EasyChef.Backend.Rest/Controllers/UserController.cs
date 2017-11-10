@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using EasyChef.Backend.Rest.Repositories;
+using EasyChef.Contracts.Shared.Models;
 using EasyChef.Contracts.Shared.RequestResponse;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +16,14 @@ namespace EasyChef.Backend.Rest.Controllers
     public class UserController : Controller
     {
         private readonly IRequestClient<VerifyLogin, VerifyLoginResponse> _requestVerifyLogin;
+        private readonly IUserRepo _userRepo;
+        private readonly IMapper _mapper;
 
-        public UserController(IRequestClient<VerifyLogin, VerifyLoginResponse> requestVerifyLogin)
+        public UserController(IRequestClient<VerifyLogin, VerifyLoginResponse> requestVerifyLogin, IUserRepo userRepo, IMapper mapper)
         {
             _requestVerifyLogin = requestVerifyLogin;
+            _userRepo = userRepo;
+            _mapper = mapper;
         }
 
         [Route("VerifyLogin")]
@@ -23,7 +31,21 @@ namespace EasyChef.Backend.Rest.Controllers
         public async Task<ActionResult> VerifyLogin([FromBody] VerifyLogin verifyLogin)
         {
             var result = await _requestVerifyLogin.Request(verifyLogin);
-            return Ok(result.Success);
+            if (!result.Success)
+                return Ok(false);
+
+            var existingUser = _userRepo.FindBy(x => x.Email == verifyLogin.Login);
+            if (existingUser == null)
+            {
+                _userRepo.Add(new User()
+                {
+                    Email = verifyLogin.Login,
+                    Password = verifyLogin.Password
+                });
+                _userRepo.Save();
+            }
+
+            return Ok(true);
         }
 
         [Route("api/User/{id:long}")]
@@ -39,17 +61,24 @@ namespace EasyChef.Backend.Rest.Controllers
             return Ok();
         }
 
-        [Route("api/User")]
+        [Route("Save")]
         [HttpPost]
-        public ActionResult Post(User User)
+        public ActionResult Post([FromBody] UserDTO user)
         {
-            if (User == null)
+            if (user == null)
                 ModelState.AddModelError("", "Please specify an object of type User.");
 
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            return Ok();
+            var original = _userRepo.FindBy(x => x.Email.ToLower() == user.Email.ToLower()).FirstOrDefault();
+            if (original != null)
+                return Ok(original.Id);
+
+            var entity = _mapper.Map<User>(user);
+            _userRepo.Add(entity);
+            _userRepo.Save();
+            return Ok(entity.Id);
         }
 
         [Route("api/User")]
@@ -74,7 +103,7 @@ namespace EasyChef.Backend.Rest.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest();
-            
+
             return Ok();
         }
     }

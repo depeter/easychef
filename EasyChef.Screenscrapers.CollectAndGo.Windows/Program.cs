@@ -22,6 +22,8 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows
                     h.Password("guest");
                 });
 
+                sbc.PurgeOnStartup = true;
+
                 // one endpoint to receive them all else, we will have concurrency shit
                 sbc.ReceiveEndpoint(host, "scrapingjobs_queue", ep =>
                 {

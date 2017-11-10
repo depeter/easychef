@@ -22,7 +22,9 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Pages
 
             _driver.FindElement(By.CssSelector("button[type='submit']")).Click();
 
-            return _driver.TryFindElement(By.CssSelector(".logout")) != null;
+            _driver.WaitUntilLoadingFinished();
+
+            return _driver.TryFindElement(By.ClassName("logout")) != null;
         }
     }
 }

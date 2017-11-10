@@ -34,7 +34,10 @@ namespace EasyChef.Backend.Rest
             services.AddTransient<ICategoryRepo, CategoryRepo>();
             services.AddTransient<IProductRepo, ProductRepo>();
             services.AddTransient<IShoppingCartRepo, ShoppingCartRepo>();
-            services.AddTransient<IShoppingCartProductRepo, ShoppingCartProductRepo>(); 
+            services.AddTransient<IShoppingCartProductRepo, ShoppingCartProductRepo>();
+            services.AddTransient<IUserRepo, UserRepo>();
+
+            services.AddCors();
 
             // service bus dependencies
             var address = new Uri("rabbitmq://localhost");
@@ -42,7 +45,7 @@ namespace EasyChef.Backend.Rest
 
             services.AddSingleton((x) => BusConfiguration(address));
 
-            services.AddTransient<IRequestClient<VerifyLogin, VerifyLoginResponse>>((x) => 
+            services.AddTransient<IRequestClient<VerifyLogin, VerifyLoginResponse>>((x) =>
                 new MessageRequestClient<VerifyLogin, VerifyLoginResponse>(x.GetService<IBusControl>(), new Uri(address.OriginalString + "/scrapingjobs_queue"), timeout));
         }
 
@@ -69,6 +72,14 @@ namespace EasyChef.Backend.Rest
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors((x) =>
+            {
+                //x.WithOrigins("http://localhost:60001");
+                x.AllowAnyOrigin()
+                 .AllowAnyMethod()
+                 .AllowAnyHeader()
+                 .AllowCredentials();
+            });
             app.UseMvc();
 
         }

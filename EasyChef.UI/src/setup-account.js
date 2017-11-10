@@ -13,26 +13,35 @@ export class SetupAccount {
     constructor(router, scrapingService) {
         this.router = router;
         this.scrapingService = scrapingService;
+        this.validating = false;
     }
 
     validate() {
-        if (!validateEmail(this.email))
-            error = 'Gelieve een geldig emailadres in te geven.';
+        if (!this.validateEmail(this.email))
+            this.error = 'Gelieve een geldig emailadres in te geven.';
 
-        if (password === '') {
-            error = 'Gelieve je wachtwoord in te geven.';
+        if (this.password === '') {
+            this.error = 'Gelieve je wachtwoord in te geven.';
         }
 
         this.validating = true;
-        this.scrapingService.verifyLogin(this.email, this.password).then(result => {
-            var validated = result.data;
-            this.validating = false;
-
-            if (validated) {
+        var self = this;
+        this.scrapingService.verifyLogin(this.email, this.password)
+            .then(response => response.json())
+            .then(data => {
+                var validated = data;
                 this.validating = false;
-                this.router.navigate('recepies');
-            }
-        });
+
+                if (validated) {
+                    self.scrapingService.saveUser(self.email, self.password)
+                        .then(response => response.json())
+                        .then(data => {
+                            localStorage.setItem('userid', data);
+                            self.router.navigate('recepies');
+                        });
+                }
+            });
+
     }
 
     validateEmail(email) {
