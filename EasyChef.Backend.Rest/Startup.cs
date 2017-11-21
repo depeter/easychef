@@ -36,6 +36,9 @@ namespace EasyChef.Backend.Rest
             services.AddTransient<IShoppingCartRepo, ShoppingCartRepo>();
             services.AddTransient<IShoppingCartProductRepo, ShoppingCartProductRepo>();
             services.AddTransient<IUserRepo, UserRepo>();
+            services.AddTransient<IRecepyRepo, RecepyRepo>();
+            services.AddTransient<IIngredientRepo, IngredientRepo>();
+            services.AddTransient<IRecepyPreparationRepo, RecepyPreparationRepo>();
 
             services.AddCors();
 

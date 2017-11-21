@@ -12,4 +12,14 @@ namespace EasyChef.Contracts.Shared.Messages
     {
         
     }
+
+    public class ScanRecepiesOnsKookboekMessage : MessageBusMessage
+    {
+        
+    }
+
+    public class ScanRecepiesLibelleLekkerMessage : MessageBusMessage
+    {
+
+    }
 }

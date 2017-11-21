@@ -6,10 +6,16 @@ namespace EasyChef.Contracts.Shared.Models
 {
     public class RecepyDTO
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
-        public virtual RecepyPreparationDTO Preparation { get; set; }
-        public long PreparationId { get; set; }
+        public string Description { get; set; }
+        public string Base64Image { get; set; }
+        public string CookingDuration { get; set; }
+        public string WorkDuration { get; set; }
+        public string TotalDuration { get; set; }
+        public int NumberOfPeople { get; set; }
+
+        public IList<RecepyPreparationDTO> RecepyPreparations { get; set; }
         public IList<IngredientDTO> Ingredients { get; set; }
     }
 }

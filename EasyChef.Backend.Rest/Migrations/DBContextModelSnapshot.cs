@@ -48,6 +48,22 @@ namespace EasyChef.Backend.Rest.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("EasyChef.Backend.Rest.Models.Ingredient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("RecepyId");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecepyId");
+
+                    b.ToTable("Ingredients");
+                });
+
             modelBuilder.Entity("EasyChef.Backend.Rest.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -76,6 +92,48 @@ namespace EasyChef.Backend.Rest.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("EasyChef.Backend.Rest.Models.Recepy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Base64Image");
+
+                    b.Property<string>("CookingDuration");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("NumberOfPeople");
+
+                    b.Property<string>("Title");
+
+                    b.Property<string>("TotalDuration");
+
+                    b.Property<string>("WorkDuration");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Recepies");
+                });
+
+            modelBuilder.Entity("EasyChef.Backend.Rest.Models.RecepyPreparation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Explanation");
+
+                    b.Property<int>("RecepyId");
+
+                    b.Property<int>("Step");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecepyId");
+
+                    b.ToTable("RecepyPreparations");
                 });
 
             modelBuilder.Entity("EasyChef.Backend.Rest.Models.ShoppingCart", b =>
@@ -131,11 +189,27 @@ namespace EasyChef.Backend.Rest.Migrations
                         .HasForeignKey("ParentId");
                 });
 
+            modelBuilder.Entity("EasyChef.Backend.Rest.Models.Ingredient", b =>
+                {
+                    b.HasOne("EasyChef.Backend.Rest.Models.Recepy", "Recepy")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("RecepyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("EasyChef.Backend.Rest.Models.Product", b =>
                 {
                     b.HasOne("EasyChef.Backend.Rest.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EasyChef.Backend.Rest.Models.RecepyPreparation", b =>
+                {
+                    b.HasOne("EasyChef.Backend.Rest.Models.Recepy", "Recepy")
+                        .WithMany("RecepyPreparations")
+                        .HasForeignKey("RecepyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

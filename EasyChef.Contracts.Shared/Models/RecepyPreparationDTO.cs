@@ -5,7 +5,9 @@ namespace EasyChef.Contracts.Shared.Models
 {
     public class RecepyPreparationDTO
     {
-        public long Id { get; set; }
-        public IList<PreparationStepDTO> Steps { get; set; }
+        public int Id { get; set; }
+        public int Step { get; set; }
+        public string Explanation { get; set; }
+        public RecepyDTO Recepy { get; set; }
     }
 }

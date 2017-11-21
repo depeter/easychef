@@ -17,6 +17,9 @@ namespace EasyChef.Backend.Rest
             CreateMapBothWays<ShoppingCartDTO, ShoppingCart>();
             CreateMapBothWays<ShoppingCartProductDTO, ShoppingCartProduct>();
             CreateMapBothWays<UserDTO, User>();
+            CreateMapBothWays<RecepyDTO, Recepy>();
+            CreateMapBothWays<IngredientDTO, Ingredient>();
+            CreateMapBothWays<RecepyPreparationDTO, RecepyPreparation>();
         }
 
         private void CreateMapBothWays<TIn, TOut>()

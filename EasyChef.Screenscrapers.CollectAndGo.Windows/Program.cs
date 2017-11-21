@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using EasyChef.Contracts.Shared.Messages;
 using EasyChef.Screenscrapers.CollectAndGo.Windows.SeleniumTasks;
 using MassTransit;
 
@@ -7,7 +8,7 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows
 {
     public static class Config
     {
-        public const string API_URL = "http://localhost:63262/";
+        public const string API_URL = "http://localhost:60000/";
     }
 
     public class Program
@@ -32,11 +33,15 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows
                     ep.Consumer<SyncCurrentShoppingCartConsumer>();
                     ep.Consumer<AddItemsToShoppingCartConsumer>();
                     ep.Consumer<VerifyLoginConsumer>();
+                    ep.Consumer<ScanRecepiesOnsKookboekConsumer>();
                 });
 
             });
 
             bus.Start();
+
+
+            bus.Publish(new ScanRecepiesOnsKookboekMessage());
         }
     }
 }

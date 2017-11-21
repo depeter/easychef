@@ -53,12 +53,47 @@ namespace EasyChef.Screenscrapers.CollectAndGo.Windows.Infrastructure
             }
 
             if (sleep)
-                Thread.Sleep(500);
+                Thread.Sleep(200);
 
             if (thenAction != null)
                 thenAction.Invoke(foundElement);
 
             return foundElement;
+        }
+
+        public static IWebElement TryWaitUntilElementVisible(this IWebDriver driver, By elementSelector, int maxWaitTimeInMilliSeconds)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            IWebElement foundElement = null;
+            while (foundElement == null || !foundElement.Displayed)
+            {
+                var foundElements = driver.FindElements(elementSelector);
+                if (foundElements.Count > 0)
+                    foundElement = foundElements[0];
+
+                if (stopwatch.ElapsedMilliseconds > maxWaitTimeInMilliSeconds)
+                    return null;
+                if (foundElement == null)
+                    Thread.Sleep(500);
+            }
+            
+            return foundElement;
+        }
+
+        public static void ScrollToBottom(this IWebDriver driver)
+        {
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollTo(0, document.body.scrollHeight)");
+        }
+
+        public static void ScrollToBottomSlowly(this IWebDriver driver, int times, int milliWait)
+        {
+            foreach (var x in Enumerable.Range(0, times))
+            {
+                ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollBy(0, 300);");
+                Thread.Sleep(milliWait);
+            }
+            
         }
 
         public static IList<IWebElement> WaitUntilElementsVisible(this IWebDriver driver, By elementSelector, Action<IList<IWebElement>> thenAction = null)

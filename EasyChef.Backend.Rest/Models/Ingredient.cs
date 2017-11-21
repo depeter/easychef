@@ -2,7 +2,10 @@
 {
     public class Ingredient
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public string Text { get; set; }
+
+        public int RecepyId { get; set; }
+        public virtual Recepy Recepy { get; set; }
     }
 }

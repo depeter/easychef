@@ -4,7 +4,12 @@ namespace EasyChef.Backend.Rest.Models
 {
     public class RecepyPreparation
     {
-        public long Id { get; set; }
-        public IList<Backend.Rest.Models.PreparationStep> Steps { get; set; }
+        public int Id { get; set; }
+
+        public int Step { get; set; }
+        public string Explanation { get; set; }
+
+        public int RecepyId { get; set; }
+        public virtual Recepy Recepy { get; set; }
     }
 }
